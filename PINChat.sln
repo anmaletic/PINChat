@@ -1,8 +1,50 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PINChat.UI", "PINChat.UI\PINChat.UI\PINChat.UI.csproj", "{1E2A6775-9E7B-4776-AE84-27BC3383A479}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PINChat.UI.Android", "PINChat.UI\PINChat.UI.Android\PINChat.UI.Android.csproj", "{80AEDBA0-1E2C-4A5A-BB42-3E6735E0F092}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PINChat.UI.Desktop", "PINChat.UI\PINChat.UI.Desktop\PINChat.UI.Desktop.csproj", "{0E5DB668-9F56-4BF7-A99F-22C64007E90C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PINChat.UI.iOS", "PINChat.UI\PINChat.UI.iOS\PINChat.UI.iOS.csproj", "{2C4D039B-716F-4AB3-BE38-D6751343B017}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PINChat.UI.Browser", "PINChat.UI\PINChat.UI.Browser\PINChat.UI.Browser.csproj", "{AD28821D-69B6-4342-B964-6AB5F78A8213}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1E2A6775-9E7B-4776-AE84-27BC3383A479}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E2A6775-9E7B-4776-AE84-27BC3383A479}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E2A6775-9E7B-4776-AE84-27BC3383A479}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E2A6775-9E7B-4776-AE84-27BC3383A479}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80AEDBA0-1E2C-4A5A-BB42-3E6735E0F092}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80AEDBA0-1E2C-4A5A-BB42-3E6735E0F092}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80AEDBA0-1E2C-4A5A-BB42-3E6735E0F092}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{80AEDBA0-1E2C-4A5A-BB42-3E6735E0F092}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80AEDBA0-1E2C-4A5A-BB42-3E6735E0F092}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80AEDBA0-1E2C-4A5A-BB42-3E6735E0F092}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{0E5DB668-9F56-4BF7-A99F-22C64007E90C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E5DB668-9F56-4BF7-A99F-22C64007E90C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E5DB668-9F56-4BF7-A99F-22C64007E90C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E5DB668-9F56-4BF7-A99F-22C64007E90C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C4D039B-716F-4AB3-BE38-D6751343B017}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C4D039B-716F-4AB3-BE38-D6751343B017}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C4D039B-716F-4AB3-BE38-D6751343B017}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{2C4D039B-716F-4AB3-BE38-D6751343B017}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C4D039B-716F-4AB3-BE38-D6751343B017}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C4D039B-716F-4AB3-BE38-D6751343B017}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{AD28821D-69B6-4342-B964-6AB5F78A8213}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD28821D-69B6-4342-B964-6AB5F78A8213}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD28821D-69B6-4342-B964-6AB5F78A8213}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD28821D-69B6-4342-B964-6AB5F78A8213}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
