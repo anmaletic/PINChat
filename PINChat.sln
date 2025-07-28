@@ -13,6 +13,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PINChat.UI.iOS", "PINChat.U
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PINChat.UI.Browser", "PINChat.UI\PINChat.UI.Browser\PINChat.UI.Browser.csproj", "{AD28821D-69B6-4342-B964-6AB5F78A8213}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PINChat.Core", "PINChat.Core\PINChat.Core.csproj", "{A22667E5-9986-4A63-9698-24BF796FDA8B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PINChat.UI.ViewManager", "PINChat.UI.ViewManager\PINChat.UI.ViewManager.csproj", "{9DA05126-A5FF-4721-8CAA-8C17E942E3AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PINChat.UI.Core", "PINChat.UI.Core\PINChat.UI.Core.csproj", "{E05F9397-296A-4BBA-9A82-DA7BCA883B01}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +49,18 @@ Global
 		{AD28821D-69B6-4342-B964-6AB5F78A8213}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD28821D-69B6-4342-B964-6AB5F78A8213}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD28821D-69B6-4342-B964-6AB5F78A8213}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A22667E5-9986-4A63-9698-24BF796FDA8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A22667E5-9986-4A63-9698-24BF796FDA8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A22667E5-9986-4A63-9698-24BF796FDA8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A22667E5-9986-4A63-9698-24BF796FDA8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DA05126-A5FF-4721-8CAA-8C17E942E3AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DA05126-A5FF-4721-8CAA-8C17E942E3AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DA05126-A5FF-4721-8CAA-8C17E942E3AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DA05126-A5FF-4721-8CAA-8C17E942E3AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E05F9397-296A-4BBA-9A82-DA7BCA883B01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E05F9397-296A-4BBA-9A82-DA7BCA883B01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E05F9397-296A-4BBA-9A82-DA7BCA883B01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E05F9397-296A-4BBA-9A82-DA7BCA883B01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
