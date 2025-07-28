@@ -1,16 +1,19 @@
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
-using PINChat.UI.ViewModels;
-using PINChat.UI.Views;
+using CommunityToolkit.Mvvm.DependencyInjection;
 
 namespace PINChat.UI
 {
     public partial class App : Application
     {
+        public App()
+        {
+            ConfigureServices();
+        }
+        
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
@@ -23,16 +26,17 @@ namespace PINChat.UI
                 // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
                 // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
                 DisableAvaloniaDataAnnotationValidation();
+                
                 desktop.MainWindow = new MainWindow
                 {
-                    DataContext = new MainViewModel()
+                    DataContext = Ioc.Default.GetService<MainViewModel>()
                 };
             }
             else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
             {
                 singleViewPlatform.MainView = new MainView
                 {
-                    DataContext = new MainViewModel()
+                    DataContext = Ioc.Default.GetService<MainViewModel>()
                 };
             }
 
@@ -50,6 +54,17 @@ namespace PINChat.UI
             {
                 BindingPlugins.DataValidators.Remove(plugin);
             }
+        }
+        
+        private void ConfigureServices()
+        {
+            Ioc.Default.ConfigureServices(new ServiceCollection()
+                // .AddSingleton<GlobalErrorHandler>()
+                // .AddSingleton<ProgressDialogService>()
+                .AddSingleton<MainWindow>()
+                .AddViewModels()
+                .AddViewManager()
+                .BuildServiceProvider());
         }
     }
 }

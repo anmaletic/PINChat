@@ -20,5 +20,11 @@
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\PINChat.UI.Core\PINChat.UI.Core.csproj" />
+    <ProjectReference Include="..\..\PINChat.UI.ViewManager\PINChat.UI.ViewManager.csproj" />
   </ItemGroup>
 </Project>
