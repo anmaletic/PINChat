@@ -1,4 +1,8 @@
-﻿namespace PINChat.UI;
+﻿using FluentValidation;
+using PINChat.UI.Core.Models;
+using PINChat.UI.Core.Validators;
+
+namespace PINChat.UI;
 
 public static class ServiceCollectionExtensions
 {
@@ -7,7 +11,8 @@ public static class ServiceCollectionExtensions
         services
             .AddTransient<MainViewModel>()
             .AddTransient<LoginViewModel>()
-            .AddTransient<ChatViewModel>();
+            .AddTransient<ChatViewModel>()
+            .AddTransient<IValidator<LoginUserModel>, LoginUserValidator>();
         
         return services;
     }

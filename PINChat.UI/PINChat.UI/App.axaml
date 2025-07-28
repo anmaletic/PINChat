@@ -22,5 +22,6 @@
 
   <Application.Styles>
     <FluentTheme />
+    <StyleInclude Source="avares://AvaloniaProgressRing/Styles/ProgressRing.xaml" />
   </Application.Styles>
 </Application>
