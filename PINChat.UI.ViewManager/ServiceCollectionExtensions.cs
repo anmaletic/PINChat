@@ -2,20 +2,14 @@
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddViewManager(this IServiceCollection services)
+    public static IServiceCollection AddViewManagerBase(this IServiceCollection services, Action<ViewManagerBuilder> configure)
     {
-        services.AddSingleton<IViewManager, ViewManagerBase>();
-        return services;
-    }
-
-    public static IServiceCollection RegisterViewWithViewManager<TView, TViewModel>(this IServiceCollection services,
-        string? viewName = null)
-        where TView : class, new()
-        where TViewModel : notnull
-    {
-        services.PostConfigure<IViewManager>(viewManager => 
+        services.AddSingleton<IViewManager>(sp =>
         {
-            viewManager.RegisterView<TView, TViewModel>(viewName);
+            var viewManager = new ViewManager(sp);
+            var builder = new ViewManagerBuilder(viewManager);
+            configure(builder);
+            return viewManager;
         });
 
         return services;
