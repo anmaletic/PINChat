@@ -32,14 +32,14 @@
 
     <!--  Checked Normal State  -->
     <Style Selector="^:checked">
-      <Setter Property="Foreground" Value="{DynamicResource Color1}" />
-      <Setter Property="Background" Value="{DynamicResource Color3}" />
+      <Setter Property="Foreground" Value="{DynamicResource ColorBrush1}" />
+      <Setter Property="Background" Value="{DynamicResource ColorBrush3}" />
     </Style>
 
     <!--  Unchecked PointerOver State  -->
     <Style Selector="^:pointerover">
-      <Setter Property="Foreground" Value="{DynamicResource Color1}" />
-      <Setter Property="Background" Value="{DynamicResource Color3}" />
+      <Setter Property="Foreground" Value="{DynamicResource ColorBrush1}" />
+      <Setter Property="Background" Value="{DynamicResource ColorBrush3}" />
     </Style>
   </Style>
 

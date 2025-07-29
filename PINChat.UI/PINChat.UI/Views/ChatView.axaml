@@ -17,21 +17,21 @@
 
   <Grid ColumnDefinitions="60, 350, *">
 
-    <Grid Grid.Column="0" Background="{DynamicResource Color3}">
+    <Grid Grid.Column="0" Background="{DynamicResource ColorBrush3}">
       <Grid.Styles>
         <Style Selector="Button">
           <Setter Property="Width" Value="40" />
           <Setter Property="Height" Value="40" />
           <Setter Property="HorizontalAlignment" Value="Center" />
           <Setter Property="CornerRadius" Value="15" />
-          <Setter Property="Background" Value="{DynamicResource Color1}" />
+          <Setter Property="Background" Value="{DynamicResource ColorBrush1}" />
         </Style>
 
         <Style Selector="fa|Icon">
           <Setter Property="HorizontalAlignment" Value="Center" />
           <Setter Property="VerticalAlignment" Value="Center" />
           <Setter Property="FontSize" Value="18" />
-          <Setter Property="Foreground" Value="{DynamicResource Color4}" />
+          <Setter Property="Foreground" Value="{DynamicResource ColorBrush4}" />
         </Style>
       </Grid.Styles>
 

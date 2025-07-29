@@ -8,7 +8,7 @@
              d:DesignHeight="800"
              d:DesignWidth="1000"
              x:DataType="vm:LoginViewModel"
-             Background="{DynamicResource Color1}"
+             Background="{DynamicResource ColorBrush1}"
              mc:Ignorable="d">
   <Grid ColumnDefinitions="*,Auto,Auto,*" RowDefinitions="2*,auto,auto,auto,auto,auto,auto,auto,40,40,60,3*">
 
@@ -17,13 +17,13 @@
     <Button Grid.Column="3"
             Width="30" Height="30"
             Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top"
-            Command="{Binding ChangeThemeCommand}">
-      X
-    </Button>
+            Command="{Binding ChangeThemeCommand}" />
+
     <!--  Username  -->
     <TextBlock Grid.Row="2" Grid.Column="1"
-               FontFamily="PollerOneFont" FontSize="24" FontWeight="Bold"
-               Foreground="{DynamicResource Color4}"
+               FontFamily="{StaticResource PoppinsBold}"
+               FontSize="24"
+               Foreground="{DynamicResource ColorBrush4}"
                Text="Korisničko ime:" />
     <TextBox Grid.Row="2" Grid.Column="2"
              Width="300"
@@ -33,8 +33,9 @@
 
     <!--  Password  -->
     <TextBlock Grid.Row="3" Grid.Column="1"
-               FontFamily="PollerOneFont" FontSize="24" FontWeight="Bold"
-               Foreground="{DynamicResource Color4}"
+               FontFamily="{StaticResource PoppinsBold}"
+               FontSize="24"
+               Foreground="{DynamicResource ColorBrush4}"
                Text="Lozinka:" />
     <TextBox Grid.Row="3" Grid.Column="2"
              Width="300"
@@ -46,15 +47,16 @@
     <Button Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"
             Width="300" Height="35"
             Margin="0,25,0,0" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-            Background="{DynamicResource Color4}"
+            Background="{DynamicResource ColorBrush4}"
             Command="{Binding LoginCommand}"
             Content="Prijava" FontWeight="Bold" Foreground="white" IsDefault="True" />
 
     <!--  Error message  -->
     <TextBlock Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2"
                Margin="0,10,0,0" HorizontalAlignment="Center"
-               FontFamily="PollerOneFont" FontSize="22"
-               Foreground="{DynamicResource Color5}"
+               FontFamily="{StaticResource PoppinsBold}"
+               FontSize="18"
+               Foreground="{DynamicResource ColorBrush5}"
                Text="{Binding Message}" />
 
     <Grid Grid.Row="5" Grid.Column="1"
@@ -63,12 +65,13 @@
       <deadpikle:ProgressRing Grid.Row="0"
                               Width="60" Height="60"
                               Margin="10,20,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"
-                              Foreground="{DynamicResource Color4}"
+                              Foreground="{DynamicResource ColorBrush4}"
                               IsActive="{Binding IsLoading}" />
       <Label Grid.Row="1"
              HorizontalAlignment="Center" VerticalAlignment="Center"
              Content="Loading..."
-             Foreground="{DynamicResource Color4}"
+             FontFamily="{StaticResource PoppinsBold}"
+             Foreground="{DynamicResource ColorBrush4}"
              IsVisible="{Binding IsLoading}" />
     </Grid>
   </Grid>

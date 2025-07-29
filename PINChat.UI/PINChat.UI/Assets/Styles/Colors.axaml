@@ -3,30 +3,32 @@
   <ResourceDictionary.ThemeDictionaries>
 
     <ResourceDictionary x:Key="Light">
-      <SolidColorBrush x:Key="Color1">#F0F0F0</SolidColorBrush>
-      <SolidColorBrush x:Key="Color2">#556f7b</SolidColorBrush>
-      <SolidColorBrush x:Key="Color3">#455f6b</SolidColorBrush>
-      <SolidColorBrush x:Key="Color4">#005f7f</SolidColorBrush>
-      <SolidColorBrush x:Key="Color5">#FF2222</SolidColorBrush>
-
-      <LinearGradientBrush x:Key="Background" StartPoint="0,0" EndPoint="100,1000">
-        <GradientStop Offset="0" Color="#F0F0F0" />
-        <GradientStop Offset="1" Color="#455f6b" />
-      </LinearGradientBrush>
+      <Color x:Key="Color1">#F0F0F0</Color>
+      <Color x:Key="Color2">#556f7b</Color>
+      <Color x:Key="Color3">#455f6b</Color>
+      <Color x:Key="Color4">#005f7f</Color>
+      <Color x:Key="Color5">#FF2222</Color>
     </ResourceDictionary>
 
     <ResourceDictionary x:Key="Dark">
-      <SolidColorBrush x:Key="Color1">#38393C</SolidColorBrush>
-      <SolidColorBrush x:Key="Color2">#556f7b</SolidColorBrush>
-      <SolidColorBrush x:Key="Color3">#455f6b</SolidColorBrush>
-      <SolidColorBrush x:Key="Color4">#005f7f</SolidColorBrush>
-      <SolidColorBrush x:Key="Color5">#FF2222</SolidColorBrush>
-
-      <LinearGradientBrush x:Key="Background" StartPoint="0,0" EndPoint="100,1000">
-        <GradientStop Offset="0" Color="#38393C" />
-        <GradientStop Offset="1" Color="#455f6b" />
-      </LinearGradientBrush>
+      <Color x:Key="Color1">#38393C</Color>
+      <Color x:Key="Color2">#556f7b</Color>
+      <Color x:Key="Color3">#455f6b</Color>
+      <Color x:Key="Color4">#005f7f</Color>
+      <Color x:Key="Color5">#FF2222</Color>
     </ResourceDictionary>
 
   </ResourceDictionary.ThemeDictionaries>
+
+  <SolidColorBrush x:Key="ColorBrush1" Color="{DynamicResource Color1}" />
+  <SolidColorBrush x:Key="ColorBrush2" Color="{DynamicResource Color2}" />
+  <SolidColorBrush x:Key="ColorBrush3" Color="{DynamicResource Color3}" />
+  <SolidColorBrush x:Key="ColorBrush4" Color="{DynamicResource Color4}" />
+  <SolidColorBrush x:Key="ColorBrush5" Color="{DynamicResource Color5}" />
+
+  <LinearGradientBrush x:Key="Background" StartPoint="0,0" EndPoint="100,1000">
+    <GradientStop Offset="0" Color="{DynamicResource Color1}" />
+    <GradientStop Offset="1" Color="{DynamicResource Color3}" />
+  </LinearGradientBrush>
+
 </ResourceDictionary>
