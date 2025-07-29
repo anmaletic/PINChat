@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="PINChat.UI.Core.Components.ContactsPane"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             x:Name="Root"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             mc:Ignorable="d">
+
+  <Grid RowDefinitions="60, *">
+
+    <TextBox Grid.Row="0"
+             Margin="10" VerticalContentAlignment="Center"
+             Background="{DynamicResource Color2}"
+             BorderThickness="0" CornerRadius="15"
+             Foreground="{DynamicResource Color4}"
+             MaxLines="1" TextChanged="TextBox_OnTextChanged" Watermark="Search contacts" />
+
+    <ItemsControl Grid.Row="1" Margin="5" ItemsSource="{Binding ElementName=Root, Path=FilteredContacts}">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <RadioButton Height="50"
+                       Margin="20,5" Padding="0" HorizontalAlignment="Stretch"
+                       BorderThickness="0" Classes="Dock"
+                       Command="{Binding ElementName=Root, Path=SelectContactCommand}"
+                       CommandParameter="{Binding .}"
+                       CornerRadius="10"
+                       Foreground="{DynamicResource Color4}"
+                       GroupName="Dock">
+            <RadioButton.Content>
+              <Grid ColumnDefinitions="60, *">
+                <Border Grid.Column="0"
+                        Width="40" Height="40"
+                        Background="{DynamicResource Color1}"
+                        BorderBrush="{DynamicResource Color3}"
+                        BorderThickness="1" CornerRadius="10">
+                  <Image Width="40" Height="40" Source="{Binding AvatarBitmap}" />
+                </Border>
+                <Label Grid.Column="1"
+                       VerticalContentAlignment="Center"
+                       Content="{Binding DisplayName}"
+                       FontFamily="{StaticResource PoetsenOneFont}"
+                       FontSize="16" />
+              </Grid>
+            </RadioButton.Content>
+          </RadioButton>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+  </Grid>
+</UserControl>
