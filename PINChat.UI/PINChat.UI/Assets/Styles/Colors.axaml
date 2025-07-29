@@ -4,18 +4,22 @@
 
     <ResourceDictionary x:Key="Light">
       <Color x:Key="Color1">#F0F0F0</Color>
-      <Color x:Key="Color2">#556f7b</Color>
+      <Color x:Key="Color2">#73919F</Color>
       <Color x:Key="Color3">#455f6b</Color>
       <Color x:Key="Color4">#005f7f</Color>
-      <Color x:Key="Color5">#FF2222</Color>
+      <Color x:Key="FontColor1">#F0F0F0</Color>
+      <Color x:Key="FontColor2">#005f7f</Color>
+      <Color x:Key="FontColor3">#FF2222</Color>
     </ResourceDictionary>
 
     <ResourceDictionary x:Key="Dark">
       <Color x:Key="Color1">#38393C</Color>
-      <Color x:Key="Color2">#556f7b</Color>
-      <Color x:Key="Color3">#455f6b</Color>
-      <Color x:Key="Color4">#005f7f</Color>
-      <Color x:Key="Color5">#FF2222</Color>
+      <Color x:Key="Color2">#4D4F53</Color>
+      <Color x:Key="Color3">#70737A</Color>
+      <Color x:Key="Color4">#B4B4B4</Color>
+      <Color x:Key="FontColor1">#F0F0F0</Color>
+      <Color x:Key="FontColor2">#005f7f</Color>
+      <Color x:Key="FontColor3">#FF2222</Color>
     </ResourceDictionary>
 
   </ResourceDictionary.ThemeDictionaries>
@@ -25,6 +29,9 @@
   <SolidColorBrush x:Key="ColorBrush3" Color="{DynamicResource Color3}" />
   <SolidColorBrush x:Key="ColorBrush4" Color="{DynamicResource Color4}" />
   <SolidColorBrush x:Key="ColorBrush5" Color="{DynamicResource Color5}" />
+  <SolidColorBrush x:Key="FontColorBrush1" Color="{DynamicResource FontColor1}" />
+  <SolidColorBrush x:Key="FontColorBrush2" Color="{DynamicResource FontColor2}" />
+  <SolidColorBrush x:Key="FontColorBrush3" Color="{DynamicResource FontColor3}" />
 
   <LinearGradientBrush x:Key="Background" StartPoint="0,0" EndPoint="100,1000">
     <GradientStop Offset="0" Color="{DynamicResource Color1}" />
