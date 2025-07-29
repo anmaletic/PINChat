@@ -10,6 +10,5 @@
         <PackageReference Include="Avalonia" />
         <PackageReference Include="CommunityToolkit.Mvvm" />
         <PackageReference Include="FluentValidation" />
-        <PackageReference Include="SkiaSharp" />
     </ItemGroup>
 </Project>
