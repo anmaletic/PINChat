@@ -16,8 +16,9 @@
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
 
-    <FontFamily x:Key="PollerOneFont">Assets\Fonts\#Poller One</FontFamily>
     <FontFamily x:Key="PoetsenOneFont">Assets\Fonts\#Poetsen One</FontFamily>
+    <FontFamily x:Key="PoppinsRegular">Assets\Fonts\#Poppins Regular</FontFamily>
+    <FontFamily x:Key="PoppinsBold">Assets\Fonts\#Poppins Bold</FontFamily>
   </Application.Resources>
 
   <Application.Styles>
