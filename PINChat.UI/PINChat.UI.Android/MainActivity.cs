@@ -2,6 +2,8 @@
 using Android.Content.PM;
 using Avalonia;
 using Avalonia.Android;
+using Projektanker.Icons.Avalonia;
+using Projektanker.Icons.Avalonia.FontAwesome;
 
 namespace PINChat.UI.Android
 {
@@ -15,6 +17,9 @@ namespace PINChat.UI.Android
     {
         protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
         {
+            IconProvider.Current
+                .Register<FontAwesomeIconProvider>();
+         
             return base.CustomizeAppBuilder(builder)
                 .WithInterFont();
         }

@@ -1,5 +1,7 @@
-﻿using System;
-using Avalonia;
+﻿using Avalonia;
+using Projektanker.Icons.Avalonia;
+using Projektanker.Icons.Avalonia.FontAwesome;
+using System;
 
 namespace PINChat.UI.Desktop
 {
@@ -14,9 +16,14 @@ namespace PINChat.UI.Desktop
 
         // Avalonia configuration, don't remove; also used by visual designer.
         public static AppBuilder BuildAvaloniaApp()
-            => AppBuilder.Configure<App>()
+        {
+            IconProvider.Current
+                .Register<FontAwesomeIconProvider>();
+
+            return AppBuilder.Configure<App>()
                 .UsePlatformDetect()
                 .WithInterFont()
                 .LogToTrace();
+        }
     }
 }
