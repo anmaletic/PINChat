@@ -1,0 +1,80 @@
+﻿<UserControl x:Class="PINChat.UI.Views.ChatView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:components="clr-namespace:PINChat.UI.Core.Components;assembly=PINChat.UI.Core"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:fa="https://github.com/projektanker/icons.avalonia"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:PINChat.UI.ViewModels"
+             d:DesignHeight="800"
+             d:DesignWidth="1000"
+             x:DataType="vm:ChatViewModel"
+             Background="{DynamicResource Background}"
+             mc:Ignorable="d">
+  <UserControl.DataContext>
+    <vm:ChatViewModel />
+  </UserControl.DataContext>
+
+  <Grid ColumnDefinitions="60, 350, *">
+
+    <Grid Grid.Column="0" Background="{DynamicResource Color3}">
+      <Grid.Styles>
+        <Style Selector="Button">
+          <Setter Property="Width" Value="40" />
+          <Setter Property="Height" Value="40" />
+          <Setter Property="HorizontalAlignment" Value="Center" />
+          <Setter Property="CornerRadius" Value="15" />
+          <Setter Property="Background" Value="{DynamicResource Color1}" />
+        </Style>
+
+        <Style Selector="fa|Icon">
+          <Setter Property="HorizontalAlignment" Value="Center" />
+          <Setter Property="VerticalAlignment" Value="Center" />
+          <Setter Property="FontSize" Value="18" />
+          <Setter Property="Foreground" Value="{DynamicResource Color4}" />
+        </Style>
+      </Grid.Styles>
+
+      <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top">
+        <StackPanel.Styles>
+          <Style Selector="Button">
+            <Setter Property="Margin" Value="0,10,0,0" />
+          </Style>
+        </StackPanel.Styles>
+
+        <Button>
+          <fa:Icon Value="fa-solid fa-message" />
+        </Button>
+        <Button>
+          <fa:Icon Value="fa-solid fa-address-book" />
+        </Button>
+        <Button>
+          <fa:Icon Value="fa-solid fa-people-group" />
+        </Button>
+      </StackPanel>
+
+      <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
+        <StackPanel.Styles>
+          <Style Selector="Button">
+            <Setter Property="Margin" Value="0,0,0,10" />
+          </Style>
+        </StackPanel.Styles>
+
+        <Button>
+          <fa:Icon Value="fa-solid fa-gear" />
+        </Button>
+        <Button>
+          <Image Width="30" Height="30" Source="{Binding User.AvatarBitmap}" />
+        </Button>
+      </StackPanel>
+    </Grid>
+
+    <Grid Grid.Column="1">
+      <components:ContactsPane Margin="10" Contacts="{Binding User.Contacts}" SelectedContact="{Binding SelectedContact, Mode=TwoWay}" />
+
+      <Border Width="1" HorizontalAlignment="Right" BorderBrush="#666666" BorderThickness="1" />
+    </Grid>
+
+    <Grid Grid.Column="2" />
+  </Grid>
+</UserControl>
