@@ -12,6 +12,7 @@ public class UserModel
     public byte[]? Avatar { get; set; }
     public string? AvatarPath { get; set; }
     public ObservableCollection<UserModel> Contacts { get; set; } = [];
+    public ObservableCollection<ChatMessageModel> Messages { get; set; } = [];
 
     public Bitmap? AvatarBitmap
     {
