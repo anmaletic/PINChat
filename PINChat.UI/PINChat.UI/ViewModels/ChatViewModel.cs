@@ -173,8 +173,18 @@ public partial class ChatViewModel : ViewModelBase
                 Content = "Bye!",
                 IsSent = true,
                 IsReceived = true,
-                IsRead = false,
+                IsRead = true,
                 IsOrigin = false
+            },
+            new ChatMessageModel
+            {
+                Timestamp = DateTime.Now,
+                Sender = User.DisplayName,
+                Content = "Bye!",
+                IsSent = true,
+                IsReceived = false,
+                IsRead = false,
+                IsOrigin = true
             }
             
         };
