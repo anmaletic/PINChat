@@ -7,7 +7,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:PINChat.UI.ViewModels"
              d:DesignHeight="800"
-             d:DesignWidth="1000"
+             d:DesignWidth="1300"
              x:DataType="vm:ChatViewModel"
              Background="{DynamicResource Background}"
              mc:Ignorable="d">
@@ -60,6 +60,10 @@
           </Style>
         </StackPanel.Styles>
 
+        <Button Command="{Binding ChangeThemeCommand}">
+          <fa:Icon Value="fa-solid fa-circle-half-stroke" />
+        </Button>
+
         <Button>
           <fa:Icon Value="fa-solid fa-gear" />
         </Button>
@@ -75,6 +79,8 @@
       <Border Width="1" HorizontalAlignment="Right" BorderBrush="#666666" BorderThickness="1" />
     </Grid>
 
-    <Grid Grid.Column="2" />
+    <Grid Grid.Column="2">
+      <components:MessagesPane Messages="{Binding SelectedContact.Messages}" />
+    </Grid>
   </Grid>
 </UserControl>
