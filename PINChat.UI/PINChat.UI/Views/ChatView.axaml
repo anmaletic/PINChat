@@ -80,7 +80,7 @@
     </Grid>
 
     <Grid Grid.Column="2">
-      <Grid RowDefinitions="60, *, 60">
+      <Grid RowDefinitions="60, *, Auto">
 
         <Grid Grid.Row="0">
           <Border Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
@@ -90,16 +90,15 @@
 
         <components:MessagesPane Grid.Row="1" Margin="10,0" Messages="{Binding SelectedContact.Messages}" />
 
-        <Grid Grid.Row="2" Margin="20,0" ColumnDefinitions="*, Auto">
+        <Grid Grid.Row="2" Margin="20,10" ColumnDefinitions="*, Auto">
           <TextBox Grid.Column="0"
-                   Height="40"
-                   Margin="0,0,10,0" VerticalContentAlignment="Center"
+                   MinHeight="40" MaxHeight="120"
+                   Margin="0,0,10,0" VerticalContentAlignment="Top"
                    Background="{DynamicResource Color1}"
                    BorderThickness="0" CornerRadius="8"
                    Foreground="{DynamicResource FontColor2}"
-                   MaxLines="5"
                    Text="{Binding NewMsgContent}"
-                   Watermark="Type your message...">
+                   TextWrapping="Wrap" Watermark="Type your message...">
             <Interaction.Behaviors>
               <EventTriggerBehavior EventName="KeyDown">
                 <InvokeCommandAction Command="{Binding HandleKeyDownCommand}" PassEventArgsToCommand="True" />
