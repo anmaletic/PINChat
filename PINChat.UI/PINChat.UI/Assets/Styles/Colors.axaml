@@ -10,6 +10,9 @@
       <Color x:Key="FontColor1">#F0F0F0</Color>
       <Color x:Key="FontColor2">#005f7f</Color>
       <Color x:Key="FontColor3">#FF2222</Color>
+
+      <Color x:Key="IndicatorColor1">#B4B4B4</Color>
+      <Color x:Key="IndicatorColor2">#039193</Color>
     </ResourceDictionary>
 
     <ResourceDictionary x:Key="Dark">
@@ -20,6 +23,9 @@
       <Color x:Key="FontColor1">#F0F0F0</Color>
       <Color x:Key="FontColor2">#005f7f</Color>
       <Color x:Key="FontColor3">#FF2222</Color>
+
+      <Color x:Key="IndicatorColor1">#B4B4B4</Color>
+      <Color x:Key="IndicatorColor2">#039193</Color>
     </ResourceDictionary>
 
   </ResourceDictionary.ThemeDictionaries>
