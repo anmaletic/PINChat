@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PINChat.Api", "PINChat.Api\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PINChat.Api.Sdk", "PINChat.Api.Sdk\PINChat.Api.Sdk.csproj", "{D94CE4CD-8E05-4B9F-B01B-CB0E59E72722}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PINChat.Contracts", "PINChat.Contracts\PINChat.Contracts.csproj", "{DDF734EE-397B-40DB-B56B-960C908F589E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,10 @@ Global
 		{D94CE4CD-8E05-4B9F-B01B-CB0E59E72722}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D94CE4CD-8E05-4B9F-B01B-CB0E59E72722}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D94CE4CD-8E05-4B9F-B01B-CB0E59E72722}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDF734EE-397B-40DB-B56B-960C908F589E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDF734EE-397B-40DB-B56B-960C908F589E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDF734EE-397B-40DB-B56B-960C908F589E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDF734EE-397B-40DB-B56B-960C908F589E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
