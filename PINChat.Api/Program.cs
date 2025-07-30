@@ -8,6 +8,8 @@ builder.Services.AddDatabase(builder.Configuration);
 
 builder.Services.AddFastEndpoints();
 
+builder.Services.AddScoped<JwtService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -6,6 +6,7 @@ global using System.Text;
 global using FastEndpoints;
 global using Microsoft.AspNetCore.Identity;
 global using Microsoft.IdentityModel.Tokens;
+global using PINChat.Api.Services;
 global using PINChat.Contracts.Requests;
 global using PINChat.Contracts.Responses;
 global using PINChat.Persistence.Db.Entities;

@@ -1,6 +1,4 @@
-﻿using PINChat.Api.Services;
-
-namespace PINChat.Api.Features.Authentication;
+﻿namespace PINChat.Api.Features.Authentication;
 
 public class LoginEndpoint : Endpoint<LoginRequest, LoginResponse>
 {
