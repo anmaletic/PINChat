@@ -29,6 +29,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\..\PINChat.Api.Sdk\PINChat.Api.Sdk.csproj" />
     <ProjectReference Include="..\..\PINChat.UI.Core\PINChat.UI.Core.csproj" />
     <ProjectReference Include="..\..\PINChat.UI.ViewManager\PINChat.UI.ViewManager.csproj" />
   </ItemGroup>

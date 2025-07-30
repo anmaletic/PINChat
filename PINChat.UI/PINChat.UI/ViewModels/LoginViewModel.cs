@@ -5,6 +5,8 @@ using Avalonia.Styling;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FluentValidation;
+using PINChat.Api.Sdk;
+using PINChat.UI.Core.Interfaces;
 using PINChat.UI.Core.Messages;
 using PINChat.UI.Core.Models;
 
@@ -13,6 +15,8 @@ namespace PINChat.UI.ViewModels;
 public partial class LoginViewModel : LoadableViewModelBase
 {
     private readonly IValidator<LoginUserModel> _userValidator;
+    private readonly IAuthApi _authApi;
+    private readonly ILoggedInUserService _loggedInUserService;
 
     [ObservableProperty]
     private LoginUserModel _loginUser = new();
@@ -20,9 +24,11 @@ public partial class LoginViewModel : LoadableViewModelBase
     [ObservableProperty]
     private string _message = "";
 
-    public LoginViewModel(IValidator<LoginUserModel> userValidator)
+    public LoginViewModel(IValidator<LoginUserModel> userValidator, IAuthApi authApi, ILoggedInUserService loggedInUserService)
     {
         _userValidator = userValidator;
+        _authApi = authApi;
+        _loggedInUserService = loggedInUserService;
     }
 
     [RelayCommand]
@@ -40,14 +46,29 @@ public partial class LoginViewModel : LoadableViewModelBase
         
         IsLoading = true;
 
-        // simulate a login delay
-        await Task.Delay(2000);
+        var loginResult = await _authApi.Login(new() { UserName = LoginUser.Username, Password = LoginUser.Password});
         
         IsLoading = false;
+        
+        if (!loginResult.IsSuccessStatusCode)
+        {
+            Message = "Invalid username or password.";
+            return;
+        }
+        
+        var loggedInUserData = loginResult.Content!;
+        
+        var user = new UserModel()
+        {
+            DisplayName = loggedInUserData.UserName,
+            Avatar = loggedInUserData.Avatar
+        };
+        
+        _loggedInUserService.SetUser(user, loggedInUserData.UserId, loggedInUserData.Token);
 
         StrongReferenceMessenger.Default.Send(new ChangeViewMessage() { View = nameof(ChatViewModel) });
     }
-
+    
     [RelayCommand]
     private void ChangeTheme()
     {    

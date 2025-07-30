@@ -6,12 +6,15 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Styling;
 using CommunityToolkit.Mvvm.Input;
+using PINChat.UI.Core.Interfaces;
 using PINChat.UI.Core.Models;
 
 namespace PINChat.UI.ViewModels;
 
 public partial class ChatViewModel : ViewModelBase
 {
+    private readonly ILoggedInUserService _loggedInUserService;
+
     [ObservableProperty]
     private UserModel _user = new();
     
@@ -21,8 +24,14 @@ public partial class ChatViewModel : ViewModelBase
     [ObservableProperty]
     private string _newMsgContent = "";
 
-    public ChatViewModel()
+    public ChatViewModel() : this(null!)
     {
+    }
+    
+    public ChatViewModel(ILoggedInUserService loggedInUserService)
+    {
+        _loggedInUserService = loggedInUserService;
+        
         GenerateDemoMessages();
         GenerateDemoContacts();
     }
@@ -38,7 +47,8 @@ public partial class ChatViewModel : ViewModelBase
         {
             FirstName = "Antonio",
             LastName = "Maletic",
-            DisplayName = "Anmal",
+            DisplayName = _loggedInUserService.User.DisplayName,
+            Avatar = _loggedInUserService.User.Avatar,
             Contacts =
             [
                 new UserModel()
