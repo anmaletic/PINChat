@@ -11,9 +11,9 @@
              x:DataType="vm:ChatViewModel"
              Background="{DynamicResource Background}"
              mc:Ignorable="d">
-  <UserControl.DataContext>
+  <Design.DataContext>
     <vm:ChatViewModel />
-  </UserControl.DataContext>
+  </Design.DataContext>
 
   <Grid ColumnDefinitions="60, 350, *">
 
