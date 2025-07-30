@@ -83,7 +83,7 @@
       <Grid RowDefinitions="60, *, Auto">
 
         <Grid Grid.Row="0">
-          <Border Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+          <Border Margin="20,20,20,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                   Background="{DynamicResource Color2}"
                   CornerRadius="15" />
         </Grid>
