@@ -10,5 +10,6 @@
         <PackageReference Include="Avalonia" />
         <PackageReference Include="CommunityToolkit.Mvvm" />
         <PackageReference Include="FluentValidation" />
+        <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" />
     </ItemGroup>
 </Project>

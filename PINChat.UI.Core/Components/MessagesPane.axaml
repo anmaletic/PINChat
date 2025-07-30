@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:converters="clr-namespace:PINChat.UI.Core.Converters"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:fa="https://github.com/projektanker/icons.avalonia"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              x:Name="Root"
              d:DesignHeight="450"
@@ -16,6 +17,15 @@
       </converters:BooleanToBrushConverter.TrueBrush>
       <converters:BooleanToBrushConverter.FalseBrush>
         <SolidColorBrush Color="{DynamicResource Color2}" />
+      </converters:BooleanToBrushConverter.FalseBrush>
+    </converters:BooleanToBrushConverter>
+
+    <converters:BooleanToBrushConverter x:Key="ReadMessageForegroundConverter">
+      <converters:BooleanToBrushConverter.TrueBrush>
+        <SolidColorBrush Color="{DynamicResource IndicatorColor2}" />
+      </converters:BooleanToBrushConverter.TrueBrush>
+      <converters:BooleanToBrushConverter.FalseBrush>
+        <SolidColorBrush Color="{DynamicResource IndicatorColor1}" />
       </converters:BooleanToBrushConverter.FalseBrush>
     </converters:BooleanToBrushConverter>
 
@@ -67,9 +77,12 @@
                        Content="{Binding Timestamp, StringFormat='{}{0:HH:mm}'}"
                        FontSize="10"
                        Foreground="{DynamicResource FontColor1}" />
-                <Label Content="x" IsVisible="{Binding IsSent}" />
-                <Label Content="x" IsVisible="{Binding IsReceived}" />
-                <Label Content="x" IsVisible="{Binding IsRead}" />
+                <Label Padding="0" Foreground="{Binding IsRead, Converter={StaticResource ReadMessageForegroundConverter}}" IsVisible="{Binding IsSent}">
+                  <fa:Icon Value="fa-solid fa-check" />
+                </Label>
+                <Label Margin="-8,0,0,0" Padding="0" Foreground="{Binding IsRead, Converter={StaticResource ReadMessageForegroundConverter}}" IsVisible="{Binding IsReceived}">
+                  <fa:Icon Value="fa-solid fa-check" />
+                </Label>
               </StackPanel>
             </Grid>
           </Border>
