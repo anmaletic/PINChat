@@ -15,12 +15,23 @@
     <PackageVersion Include="Avalonia.Android" Version="11.3.2" />
     <PackageVersion Include="AvaloniaUI.DiagnosticsSupport" Version="2.0.4" />
     <PackageVersion Include="Deadpikle.AvaloniaProgressRing" Version="0.10.10" />
+    <PackageVersion Include="FastEndpoints" Version="7.0.1" />
     <PackageVersion Include="FluentValidation" Version="12.0.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.7" />
+    <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.7" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.7" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.7" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.7" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.7" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.7" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.7" />
     <PackageVersion Include="Microsoft.Extensions.Options" Version="9.0.7" />
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageVersion Include="Projektanker.Icons.Avalonia.FontAwesome" Version="9.6.2" />
+    <PackageVersion Include="Refit" Version="8.0.0" />
+    <PackageVersion Include="Refit.HttpClientFactory" Version="8.0.0" />
+    <PackageVersion Include="Scalar.AspNetCore" Version="2.6.5" />
     <PackageVersion Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.15" />
     <PackageVersion Include="Xaml.Behaviors.Avalonia" Version="11.3.2" />
     <PackageVersion Include="Xaml.Behaviors.Interactions" Version="11.3.2" />
