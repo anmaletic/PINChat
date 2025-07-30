@@ -97,12 +97,22 @@
                    Background="{DynamicResource Color1}"
                    BorderThickness="0" CornerRadius="8"
                    Foreground="{DynamicResource FontColor2}"
-                   MaxLines="5" Watermark="Type your message..." />
+                   MaxLines="5"
+                   Text="{Binding NewMsgContent}"
+                   Watermark="Type your message...">
+            <Interaction.Behaviors>
+              <EventTriggerBehavior EventName="KeyDown">
+                <InvokeCommandAction Command="{Binding HandleKeyDownCommand}" PassEventArgsToCommand="True" />
+              </EventTriggerBehavior>
+            </Interaction.Behaviors>
+          </TextBox>
           <Button Grid.Column="1"
                   Height="39"
                   Padding="15,0" VerticalContentAlignment="Center"
                   Background="{DynamicResource Color2}"
-                  BorderThickness="0" Content="Send" CornerRadius="8"
+                  BorderThickness="0"
+                  Command="{Binding SendMessageCommand}"
+                  Content="Send" CornerRadius="8"
                   Foreground="{DynamicResource FontColor1}" />
         </Grid>
       </Grid>

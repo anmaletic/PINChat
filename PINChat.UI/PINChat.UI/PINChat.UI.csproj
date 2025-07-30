@@ -23,6 +23,9 @@
     <PackageReference Include="Deadpikle.AvaloniaProgressRing" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
     <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" />
+    <PackageReference Include="Xaml.Behaviors.Avalonia" />
+    <PackageReference Include="Xaml.Behaviors.Interactions" />
+    <PackageReference Include="Xaml.Behaviors.Interactivity" />
   </ItemGroup>
   
   <ItemGroup>
