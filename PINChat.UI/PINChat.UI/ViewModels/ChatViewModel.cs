@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Styling;
 using CommunityToolkit.Mvvm.Input;
 using PINChat.UI.Core.Models;
@@ -14,6 +17,9 @@ public partial class ChatViewModel : ViewModelBase
     
     [ObservableProperty]
     private UserModel _selectedContact = new();
+
+    [ObservableProperty]
+    private string _newMsgContent = "";
 
     public ChatViewModel()
     {
@@ -189,6 +195,59 @@ public partial class ChatViewModel : ViewModelBase
             
         };
     }
+    
+    
+    [RelayCommand]
+    private async Task HandleKeyDown(KeyEventArgs e)
+    {
+        switch (e.Key)
+        {
+            case Key.Enter when !e.KeyModifiers.HasFlag(KeyModifiers.Shift):
+            {
+                await SendMessage();
+                e.Handled = true;
+                break;
+            }
+            case Key.Enter when e.KeyModifiers.HasFlag(KeyModifiers.Shift):
+            {
+                NewMsgContent += Environment.NewLine;
+                var textBox = e.Source as TextBox;
+                textBox!.CaretIndex = textBox?.Text?.Length ?? 0;
+                e.Handled = true;
+                break;
+            }
+        }
+    }
+
+    [RelayCommand]
+    private async Task SendMessage()
+    {
+        var msg = new ChatMessageModel()
+        {
+            Timestamp = DateTime.Now,
+            Sender = User.DisplayName,
+            Content = NewMsgContent,
+            IsSent = true,
+            IsReceived = false,
+            IsRead = false,
+            IsOrigin = true
+        };   
+        
+        if (SelectedContact != null)
+        {
+            SelectedContact.Messages.Add(msg);
+            NewMsgContent = string.Empty;
+        }
+
+        // simulate message received delay
+        await Task.Delay(1000);
+        msg.IsReceived = true;
+
+        // simulate message read delay
+        await Task.Delay(1000);
+        msg.IsRead = true;
+    }
+
     
     [RelayCommand]
     private void ChangeTheme()
