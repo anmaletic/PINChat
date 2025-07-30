@@ -27,7 +27,10 @@
             Background="{DynamicResource Color1}"
             CornerRadius="15" Opacity="0.1" />
 
-    <ListBox Margin="20" Background="Transparent" ItemsSource="{Binding ElementName=Root, Path=Messages}">
+    <ListBox Name="MessageListBox"
+             Margin="20" Padding="10"
+             AutoScrollToSelectedItem="True" Background="Transparent"
+             ItemsSource="{Binding ElementName=Root, Path=Messages}">
 
       <ListBox.Styles>
         <Style Selector="ListBoxItem">
@@ -58,11 +61,16 @@
                          Foreground="{DynamicResource FontColor1}"
                          Text="{Binding Content}"
                          TextWrapping="Wrap" />
-              <Label Grid.Row="1" Grid.Column="1"
-                     Margin="0,0,0,0" HorizontalAlignment="Right"
-                     Content="{Binding Timestamp, StringFormat='{}{0:HH:mm}'}"
-                     FontSize="10"
-                     Foreground="{DynamicResource FontColor1}" />
+              <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+
+                <Label Margin="0,0,0,0" HorizontalAlignment="Right"
+                       Content="{Binding Timestamp, StringFormat='{}{0:HH:mm}'}"
+                       FontSize="10"
+                       Foreground="{DynamicResource FontColor1}" />
+                <Label Content="x" IsVisible="{Binding IsSent}" />
+                <Label Content="x" IsVisible="{Binding IsReceived}" />
+                <Label Content="x" IsVisible="{Binding IsRead}" />
+              </StackPanel>
             </Grid>
           </Border>
         </DataTemplate>
