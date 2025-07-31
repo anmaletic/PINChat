@@ -69,6 +69,7 @@ namespace PINChat.UI
                 .AddViewModels()
                 .AddViewManager()
                 .AddApiSdk()
+                .AddSingleton<IChatService, ChatService>()
                 .AddSingleton<ILoggedInUserService, LoggedInUserService>()
                 .BuildServiceProvider());
         }
