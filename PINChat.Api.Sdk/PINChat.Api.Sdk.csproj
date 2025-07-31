@@ -13,7 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\PINChat.Api\PINChat.Api.csproj" />
+      <ProjectReference Include="..\PINChat.Contracts\PINChat.Contracts.csproj" />
     </ItemGroup>
 
 </Project>
