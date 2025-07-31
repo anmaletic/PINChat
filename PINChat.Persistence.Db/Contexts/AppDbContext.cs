@@ -6,6 +6,8 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
         : base(options)
     {
     }
+    
+    public DbSet<Message> Messages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
