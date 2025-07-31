@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PINChat.Persistence.Db.Contexts;
 
@@ -11,9 +12,11 @@ using PINChat.Persistence.Db.Contexts;
 namespace PINChat.Persistence.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250731072451_Add Messages and Contacts")]
+    partial class AddMessagesandContacts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -248,6 +251,9 @@ namespace PINChat.Persistence.Db.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("ContactUserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -257,6 +263,8 @@ namespace PINChat.Persistence.Db.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("ContactUserId");
 
@@ -358,14 +366,18 @@ namespace PINChat.Persistence.Db.Migrations
 
             modelBuilder.Entity("PINChat.Persistence.Db.Entities.Contact", b =>
                 {
+                    b.HasOne("PINChat.Persistence.Db.Entities.ApplicationUser", null)
+                        .WithMany("Contacts")
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("PINChat.Persistence.Db.Entities.ApplicationUser", "ContactUser")
-                        .WithMany("AddedByOthers")
+                        .WithMany()
                         .HasForeignKey("ContactUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("PINChat.Persistence.Db.Entities.ApplicationUser", "User")
-                        .WithMany("MyContacts")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -396,9 +408,7 @@ namespace PINChat.Persistence.Db.Migrations
 
             modelBuilder.Entity("PINChat.Persistence.Db.Entities.ApplicationUser", b =>
                 {
-                    b.Navigation("AddedByOthers");
-
-                    b.Navigation("MyContacts");
+                    b.Navigation("Contacts");
                 });
 #pragma warning restore 612, 618
         }
