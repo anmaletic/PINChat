@@ -2,9 +2,13 @@
 
 public record LoginResponse
 {
-    public required string Token { get; set; }
+    public string? Token { get; set; }
     public required string UserId { get; set; }
     public required string UserName { get; set; }
+    public string? FirstName { get; set; }
+    public string? LastName { get; set; }
     public required byte[] Avatar { get; set; } = [];
+    public string? AvatarPath { get; set; }
+    public IEnumerable<LoginResponse> Contacts { get; set; } = [];
     public required string Message { get; set; }
 }
