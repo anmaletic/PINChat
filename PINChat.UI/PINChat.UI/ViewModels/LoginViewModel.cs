@@ -58,13 +58,7 @@ public partial class LoginViewModel : LoadableViewModelBase
         
         var loggedInUserData = loginResult.Content!;
         
-        var user = new UserModel()
-        {
-            DisplayName = loggedInUserData.UserName,
-            Avatar = loggedInUserData.Avatar
-        };
-        
-        _loggedInUserService.SetUser(user, loggedInUserData.UserId, loggedInUserData.Token);
+        _loggedInUserService.SetUser(loggedInUserData.ToModel(), loggedInUserData.UserId, loggedInUserData.Token);
 
         StrongReferenceMessenger.Default.Send(new ChangeViewMessage() { View = nameof(ChatViewModel) });
     }
