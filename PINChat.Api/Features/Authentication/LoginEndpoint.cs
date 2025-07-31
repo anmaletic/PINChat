@@ -1,4 +1,7 @@
-﻿namespace PINChat.Api.Features.Authentication;
+﻿using Microsoft.EntityFrameworkCore;
+using PINChat.Api.Mapping;
+
+namespace PINChat.Api.Features.Authentication;
 
 public class LoginEndpoint : Endpoint<LoginRequest, LoginResponse>
 {
@@ -29,7 +32,11 @@ public class LoginEndpoint : Endpoint<LoginRequest, LoginResponse>
 
     public override async Task HandleAsync(LoginRequest req, CancellationToken ct)
     {
-        var user = await _userManager.FindByNameAsync(req.UserName);
+        var user = await _userManager.Users
+            .Include(u => u.MyContacts)
+            .ThenInclude(c => c.ContactUser)
+            .SingleOrDefaultAsync(u => u.UserName == req.UserName, cancellationToken: ct);
+
         if (user == null)
         {
             AddError("Invalid credentials.", "InvalidCredentials");
@@ -48,14 +55,10 @@ public class LoginEndpoint : Endpoint<LoginRequest, LoginResponse>
 
         var token = _jwtService.GenerateToken(user);
 
-        await Send.ResponseAsync(new LoginResponse
-        {
-            Token = token,
-            UserId = user.Id,
-            UserName = user.UserName,
-            Avatar = user.Avatar,
-            Message = "Login successful!"
-        }, cancellation: ct);
+        var response = user.ToResponse();
+        response.Token = token;
+
+        await Send.ResponseAsync(response, cancellation: ct);
     }
 
 }
