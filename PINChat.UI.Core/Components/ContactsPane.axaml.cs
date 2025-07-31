@@ -77,7 +77,7 @@ public partial class ContactsPane : UserControl
             var lowerCaseSearchText = filter.ToLowerInvariant();
             foreach (var contact in Contacts)
             {
-                if (contact.DisplayName!.ToLowerInvariant().Contains(lowerCaseSearchText))
+                if (contact.UserName!.ToLowerInvariant().Contains(lowerCaseSearchText))
                 {
                     FilteredContacts.Add(contact);
                 }

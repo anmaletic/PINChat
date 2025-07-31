@@ -39,7 +39,7 @@
                 </Border>
                 <Label Grid.Column="1"
                        VerticalContentAlignment="Center"
-                       Content="{Binding DisplayName}"
+                       Content="{Binding UserName}"
                        FontFamily="{StaticResource PoetsenOneFont}"
                        FontSize="16" />
               </Grid>
