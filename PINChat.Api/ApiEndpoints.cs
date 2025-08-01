@@ -11,4 +11,11 @@ public static class ApiEndpoints
         public const string Register = $"{Base}/register";
         public const string Login = $"{Base}/login";
     }
+    
+    public static class Messages
+    {
+        private const string Base = $"{ApiBase}/messages";
+        
+        public const string GetChatHistory = $"{Base}/history/{{ContactId}}";
+    }
 }
