@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Styling;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using PINChat.UI.Core.Interfaces;
 using PINChat.UI.Core.Models;
@@ -13,200 +15,96 @@ namespace PINChat.UI.ViewModels;
 
 public partial class ChatViewModel : ViewModelBase
 {
-    private readonly ILoggedInUserService _loggedInUserService;
+    private readonly IChatService _chatService;
 
     [ObservableProperty]
     private UserModel _user = new();
-    
+
     [ObservableProperty]
     private UserModel _selectedContact = new();
 
     [ObservableProperty]
     private string _newMsgContent = "";
 
-    public ChatViewModel() : this(null!)
+    public ChatViewModel() : this(null!, null!)
     {
-    }
-    
-    public ChatViewModel(ILoggedInUserService loggedInUserService)
-    {
-        _loggedInUserService = loggedInUserService;
-        
-        GenerateDemoMessages();
-        GenerateDemoContacts();
     }
 
-    partial void OnSelectedContactChanged(UserModel value)
+    public ChatViewModel(ILoggedInUserService loggedInUserService, IChatService chatService)
     {
-        GenerateDemoMessages();
+        _chatService = chatService;
+
+        User = loggedInUserService.User!;
+
+        // Subscribe to chat service events
+        _chatService.MessageReceived += OnMessageReceived;
+        _chatService.MessageStatusUpdated += OnMessageStatusUpdated;
+        _chatService.ConnectionStatusChanged += OnConnectionStatusChanged;
+
+        _chatService.ConnectAsync();
     }
 
-    private void GenerateDemoContacts()
+    private void OnMessageReceived(object? sender, MessageReceivedEventArgs e)
     {
-        User = new UserModel()
+        var backendMessage = e.Message;
+
+        var existingMsg = SelectedContact.Messages.FirstOrDefault(m => m.Id == backendMessage.TempId);
+
+        if (existingMsg != null && existingMsg.IsOrigin)
         {
-            FirstName = "Antonio",
-            LastName = "Maletic",
-            DisplayName = _loggedInUserService.User.DisplayName,
-            Avatar = _loggedInUserService.User.Avatar,
-            Contacts =
-            [
-                new UserModel()
-                {
-                    FirstName = "John",
-                    LastName = "Doe",
-                    DisplayName = "JohnD",
-                },
-                new UserModel()
-                {
-                    FirstName = "Jane",
-                    LastName = "Smith",
-                    DisplayName = "JaneS",
-                },
-                new UserModel()
-                {
-                    FirstName = "Alice",
-                    LastName = "Johnson",
-                    DisplayName = "AliceJ",
-                },
-                new UserModel()
-                {
-                    FirstName = "Bob",
-                    LastName = "Brown",
-                    DisplayName = "BobB",
-                },
-                new UserModel()
-                {
-                    FirstName = "Charlie",
-                    LastName = "Davis",
-                    DisplayName = "CharlieD",
-                },
-            ]
-        };
+            existingMsg.Id = backendMessage.Id;
+            existingMsg.IsSent = backendMessage.IsSent;
+        }
+        else if (backendMessage.RecipientId == User.UserId &&
+                 backendMessage.SenderId == SelectedContact.UserId)
+        {
+            var incomingMsg = new ChatMessageModel
+            {
+                Id = backendMessage.Id,
+                Content = backendMessage.Content,
+                Sender = backendMessage.SenderId, 
+                IsOrigin = false,
+                Timestamp = backendMessage.Timestamp,
+                IsSent = backendMessage.IsSent,
+                IsReceived = backendMessage.IsReceived,
+                IsRead = backendMessage.IsRead
+            };
+            SelectedContact.Messages.Add(incomingMsg);
+
+            _ = _chatService.SendMessageReceivedStatusAsync(incomingMsg.Id);
+
+            Task.Run(async () =>
+            {
+                await Task.Delay(1000);
+                _ = _chatService.SendMessageReadStatusAsync(incomingMsg.Id);
+            });
+        }
     }
 
-    private void GenerateDemoMessages()
+    private void OnMessageStatusUpdated(object? sender, MessageStatusUpdatedEventArgs e)
     {
-        if (SelectedContact == null)
+        var msgToUpdate = SelectedContact.Messages.FirstOrDefault(m => m.Id == e.MessageId);
+        if (msgToUpdate == null)
+        {
             return;
+        }
 
-        SelectedContact.Messages = new ObservableCollection<ChatMessageModel>
+        if (e.Status.Equals("Received", StringComparison.OrdinalIgnoreCase))
         {
-            new ChatMessageModel
-            {
-                Timestamp = DateTime.Now.AddMinutes(-10),
-                Sender = User.DisplayName,
-                Content = "Hello, how are you?",
-                IsSent = true,
-                IsReceived = true,
-                IsRead = true,
-                IsOrigin = true
-            },
-            new ChatMessageModel
-            {
-                Timestamp = DateTime.Now.AddMinutes(-9),
-                Sender = SelectedContact.DisplayName,
-                Content = "I'm good, thanks! How about you?",
-                IsSent = true,
-                IsReceived = true,
-                IsRead = true,
-                IsOrigin = false
-            },
-            new ChatMessageModel
-            {
-                Timestamp = DateTime.Now.AddMinutes(-8),
-                Sender = User.DisplayName,
-                Content = "Doing well, just working on some projects.",
-                IsSent = true,
-                IsReceived = true,
-                IsRead = true,
-                IsOrigin = true
-            },
-            new ChatMessageModel
-            {
-                Timestamp = DateTime.Now.AddMinutes(-7),
-                Sender = SelectedContact.DisplayName,
-                Content = "Sounds great! Let me know if you need any help.",
-                IsSent = true,
-                IsReceived = true,
-                IsRead = true,
-                IsOrigin = false
-            },
-            new ChatMessageModel
-            {
-                Timestamp = DateTime.Now.AddMinutes(-6),
-                Sender = User.DisplayName,
-                Content = "Thanks! I appreciate it.",
-                IsSent = true,
-                IsReceived = true,
-                IsRead = true,
-                IsOrigin = true
-            },
-            new ChatMessageModel
-            {
-                Timestamp = DateTime.Now.AddMinutes(-5),
-                Sender = SelectedContact.DisplayName,
-                Content = "No problem! Let's catch up later.",
-                IsSent = true,
-                IsReceived = true,
-                IsRead = true,
-                IsOrigin = false
-            },
-            new ChatMessageModel
-            {
-                Timestamp = DateTime.Now.AddMinutes(-4),
-                Sender = User.DisplayName,
-                Content = "Sure, talk to you later!",
-                IsSent = true,
-                IsReceived = true,
-                IsRead = true,
-                IsOrigin = true
-            },
-            new ChatMessageModel
-            {
-                Timestamp = DateTime.Now.AddMinutes(-3),
-                Sender = SelectedContact.DisplayName,
-                Content = "Take care!",
-                IsSent = true,
-                IsReceived = true,
-                IsRead = true,
-                IsOrigin = false
-            },
-            new ChatMessageModel
-            {
-                Timestamp = DateTime.Now.AddMinutes(-2),
-                Sender = User.DisplayName,
-                Content = "You too!",
-                IsSent = true,
-                IsReceived = true,
-                IsRead = true,
-                IsOrigin = true
-            },
-            new ChatMessageModel
-            {
-                Timestamp = DateTime.Now.AddMinutes(-1),
-                Sender = SelectedContact.DisplayName,
-                Content = "Bye!",
-                IsSent = true,
-                IsReceived = true,
-                IsRead = true,
-                IsOrigin = false
-            },
-            new ChatMessageModel
-            {
-                Timestamp = DateTime.Now,
-                Sender = User.DisplayName,
-                Content = "Bye!",
-                IsSent = true,
-                IsReceived = false,
-                IsRead = false,
-                IsOrigin = true
-            }
-            
-        };
+            msgToUpdate.IsReceived = true;
+        }
+        else if (e.Status.Equals("Read", StringComparison.OrdinalIgnoreCase))
+        {
+            msgToUpdate.IsRead = true;
+        }
     }
-    
-    
+
+    private void OnConnectionStatusChanged(object? sender, bool isConnected)
+    {
+        Console.WriteLine($"Chat Service Connection Status: {isConnected}");
+    }
+
+
     [RelayCommand]
     private async Task HandleKeyDown(KeyEventArgs e)
     {
@@ -232,39 +130,50 @@ public partial class ChatViewModel : ViewModelBase
     [RelayCommand]
     private async Task SendMessage()
     {
+        if (string.IsNullOrWhiteSpace(NewMsgContent) || SelectedContact == null || !_chatService.IsConnected)
+        {
+            Console.WriteLine(
+                "Cannot send message: content empty, no contact selected, or chat service not connected.");
+            return;
+        }
+
+        var tempMsgId = Guid.NewGuid().ToString();
         var msg = new ChatMessageModel()
         {
+            Id = tempMsgId,
             Timestamp = DateTime.Now,
-            Sender = User.DisplayName,
+            Sender = User.UserName!,
             Content = NewMsgContent,
             IsSent = true,
             IsReceived = false,
             IsRead = false,
             IsOrigin = true
-        };   
-        
-        if (SelectedContact != null)
+        };
+
+        SelectedContact.Messages.Add(msg);
+        NewMsgContent = string.Empty;
+
+        try
         {
-            SelectedContact.Messages.Add(msg);
-            NewMsgContent = string.Empty;
+            await _chatService.SendMessageAsync(SelectedContact!.UserId, msg.Content, tempMsgId);
         }
-
-        // simulate message received delay
-        await Task.Delay(1000);
-        msg.IsReceived = true;
-
-        // simulate message read delay
-        await Task.Delay(1000);
-        msg.IsRead = true;
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error sending message via chat service: {ex.Message}");
+            await Dispatcher.UIThread.InvokeAsync(() =>
+                SelectedContact!.Messages.Remove(msg));
+        }
     }
 
-    
+
     [RelayCommand]
     private void ChangeTheme()
-    {    
+    {
         if (Application.Current != null)
         {
-            Application.Current.RequestedThemeVariant = Application.Current.ActualThemeVariant == ThemeVariant.Light ? ThemeVariant.Dark : ThemeVariant.Light;
+            Application.Current.RequestedThemeVariant = Application.Current.ActualThemeVariant == ThemeVariant.Light
+                ? ThemeVariant.Dark
+                : ThemeVariant.Light;
         }
     }
 }
