@@ -14,11 +14,6 @@
 
     <Image Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Source="/Assets/Images/Logo.png" />
 
-    <Button Grid.Column="3"
-            Width="30" Height="30"
-            Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top"
-            Command="{Binding ChangeThemeCommand}" />
-
     <!--  Username  -->
     <TextBlock Grid.Row="2" Grid.Column="1"
                FontFamily="{StaticResource PoppinsBold}"

@@ -62,13 +62,4 @@ public partial class LoginViewModel : LoadableViewModelBase
 
         StrongReferenceMessenger.Default.Send(new ChangeViewMessage() { View = nameof(ChatViewModel) });
     }
-    
-    [RelayCommand]
-    private void ChangeTheme()
-    {    
-        if (Application.Current != null)
-        {
-            Application.Current.RequestedThemeVariant = Application.Current.ActualThemeVariant == ThemeVariant.Light ? ThemeVariant.Dark : ThemeVariant.Light;
-        }
-    }
 }
