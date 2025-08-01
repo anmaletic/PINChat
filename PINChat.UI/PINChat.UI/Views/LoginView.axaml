@@ -11,6 +11,14 @@
              Background="{DynamicResource ColorBrush1}"
              mc:Ignorable="d">
 
-  <components:SignIn IsLoading="{Binding IsLoading}" LoginCommand="{Binding LoginCommand}" Message="{Binding Message}" User="{Binding LoginUser}" />
+  <Design.DataContext>
+    <vm:LoginViewModel />
+  </Design.DataContext>
+
+  <TransitioningContentControl Content="{Binding CurrentContent}">
+    <TransitioningContentControl.PageTransition>
+      <Rotate3DTransition Duration="0:00:00.300" />
+    </TransitioningContentControl.PageTransition>
+  </TransitioningContentControl>
 
 </UserControl>

@@ -1,65 +1,62 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
-using Avalonia;
-using Avalonia.Styling;
+using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FluentValidation;
 using PINChat.Api.Sdk;
+using PINChat.UI.Core.Components;
 using PINChat.UI.Core.Interfaces;
 using PINChat.UI.Core.Messages;
 using PINChat.UI.Core.Models;
+using PINChat.UI.ViewManager.Interfaces;
 
 namespace PINChat.UI.ViewModels;
 
 public partial class LoginViewModel : LoadableViewModelBase
 {
-    private readonly IValidator<LoginUserModel> _userValidator;
-    private readonly IAuthApi _authApi;
-    private readonly ILoggedInUserService _loggedInUserService;
-
-    [ObservableProperty]
-    private LoginUserModel _loginUser = new();
+    private readonly IViewManager _viewManager;
     
     [ObservableProperty]
-    private string _message = "";
+    private UserControl _currentContent = new();
 
-    public LoginViewModel(IValidator<LoginUserModel> userValidator, IAuthApi authApi, ILoggedInUserService loggedInUserService)
+    public LoginViewModel() : this(null!)
     {
-        _userValidator = userValidator;
-        _authApi = authApi;
-        _loggedInUserService = loggedInUserService;
+        // Default constructor for design-time data or testing purposes
+    }
+    
+    public LoginViewModel(IViewManager viewManager)
+    {
+   
+        _viewManager = viewManager;
+        
+        StrongReferenceMessenger.Default.Register<ChangeLoginViewMessage>(this, OnChangeViewMessageReceived);
+        StrongReferenceMessenger.Default.Register<IsViewDeactivatedMessage>(this, OnDeactivatedMessageReceived);
+
+        InitializeDefaultView();
+    }
+    
+    private void OnDeactivatedMessageReceived(object recipient, IsViewDeactivatedMessage message)
+    {
+        if (message.IsDeactivated)
+        {
+            StrongReferenceMessenger.Default.UnregisterAll(this);
+        }
     }
 
-    [RelayCommand]
-    private async Task Login()
+    private void InitializeDefaultView()
     {
-        Message = "";
-        
-        var result = await _userValidator.ValidateAsync(LoginUser);
-
-        if (!result.IsValid)
-        {
-            Message = string.Join("\n", result.Errors.Select(e => e.ErrorMessage));
-            return;
-        }
-        
-        IsLoading = true;
-
-        var loginResult = await _authApi.Login(new() { UserName = LoginUser.Username, Password = LoginUser.Password});
-        
-        IsLoading = false;
-        
-        if (!loginResult.IsSuccessStatusCode)
-        {
-            Message = "Invalid username or password.";
-            return;
-        }
-        
-        var loggedInUserData = loginResult.Content!;
-        
-        _loggedInUserService.SetUser(loggedInUserData.ToModel(), loggedInUserData.UserId, loggedInUserData.Token);
-
-        StrongReferenceMessenger.Default.Send(new ChangeViewMessage() { View = nameof(ChatViewModel) });
+        ShowView(nameof(SignInViewModel));
+    }
+    
+    private void OnChangeViewMessageReceived(object recipient, ChangeLoginViewMessage msg)
+    {
+        ShowView(msg.View);
+    }
+    
+    private void ShowView(string viewName)
+    {
+        CurrentContent = _viewManager.GetView(viewName);
     }
 }

@@ -1,0 +1,90 @@
+﻿<UserControl x:Class="PINChat.UI.Views.SignInView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:deadpikle="clr-namespace:AvaloniaProgressRing;assembly=AvaloniaProgressRing"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:PINChat.UI.ViewModels"
+             d:DesignHeight="800"
+             d:DesignWidth="1000"
+             x:DataType="vm:SignInViewModel"
+             Background="{DynamicResource ColorBrush1}"
+             mc:Ignorable="d">
+
+  <Design.DataContext>
+    <vm:SignInViewModel />
+  </Design.DataContext>
+
+  <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ColumnDefinitions="*,auto,*" RowDefinitions="2*, Auto, 3*">
+
+    <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+      <Image Width="500" Source="avares://PINChat.UI.Core/Assets/Images/Logo.png" />
+
+      <!--  UserName  -->
+      <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+        <TextBlock Width="250"
+                   FontFamily="{StaticResource PoppinsBold}"
+                   FontSize="24"
+                   Foreground="{DynamicResource FontColor2}"
+                   Text="Korisničko ime:" />
+        <TextBox Width="300"
+                 Margin="0,2,2,2" Padding="10,0,0,0" VerticalContentAlignment="Center"
+                 BorderThickness="0.9" FontSize="18"
+                 Text="{Binding User.Username}" />
+      </StackPanel>
+
+      <!--  Password  -->
+      <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+        <TextBlock Width="250"
+                   FontFamily="{StaticResource PoppinsBold}"
+                   FontSize="24"
+                   Foreground="{DynamicResource FontColor2}"
+                   Text="Lozinka:" />
+        <TextBox Width="300"
+                 Margin="0,2,2,2" Padding="10,0,0,0" VerticalContentAlignment="Center"
+                 BorderThickness="0.9" FontSize="18" PasswordChar="*"
+                 Text="{Binding User.Password}" />
+      </StackPanel>
+
+      <!--  Register  -->
+      <Button Width="300" Height="35"
+              Margin="0,25,0,0" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+              Background="{DynamicResource FontColor2}"
+              Command="{Binding SignInCommand}"
+              Content="Prijava" FontWeight="Bold"
+              Foreground="{DynamicResource FontColor1}"
+              IsDefault="True" />
+
+      <!--  Registration state  -->
+      <HyperlinkButton Width="300" Height="35"
+                       Margin="0,0,0,0" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                       Command="{Binding ChangeRegistrationStateCommand}"
+                       Content="Not registered? Sign up" FontWeight="Bold"
+                       Foreground="{DynamicResource FontColor2}"
+                       IsDefault="True" />
+
+      <!--  Error message  -->
+      <TextBlock Margin="0,10,0,0" HorizontalAlignment="Center"
+                 FontFamily="{StaticResource PoppinsBold}"
+                 FontSize="18"
+                 Foreground="{DynamicResource FontColor3}"
+                 Text="{Binding Message}" />
+
+      <Grid Height="80" ColumnSpan="2" RowDefinitions="Auto, Auto">
+        <deadpikle:ProgressRing Grid.Row="0"
+                                Width="60" Height="60"
+                                Margin="10,20,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                Foreground="{DynamicResource FontColor2}"
+                                IsActive="{Binding IsLoading}" />
+        <Label Grid.Row="1"
+               HorizontalAlignment="Center" VerticalAlignment="Center"
+               Content="Loading..."
+               FontFamily="{StaticResource PoppinsBold}"
+               Foreground="{DynamicResource FontColor2}"
+               IsVisible="{Binding IsLoading}" />
+      </Grid>
+
+    </StackPanel>
+  </Grid>
+</UserControl>

@@ -12,7 +12,10 @@ public static class ServiceCollectionExtensions
             .AddTransient<MainViewModel>()
             .AddTransient<LoginViewModel>()
             .AddTransient<ChatViewModel>()
-            .AddTransient<IValidator<LoginUserModel>, LoginUserValidator>();
+            .AddTransient<SignInViewModel>()
+            .AddTransient<SignUpViewModel>()
+            .AddTransient<IValidator<LoginUserModel>, LoginUserValidator>()
+            .AddTransient<IValidator<RegistrationUserModel>, RegistrationUserValidator>();
         
         return services;
     }
@@ -22,6 +25,8 @@ public static class ServiceCollectionExtensions
         services.AddViewManagerBase(builder =>
         {
             builder.RegisterView<LoginView, LoginViewModel>();
+            builder.RegisterView<SignInView, SignInViewModel>();
+            builder.RegisterView<SignUpView, SignUpViewModel>();
             builder.RegisterView<ChatView, ChatViewModel>();
         });
 
