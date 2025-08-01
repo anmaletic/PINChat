@@ -19,7 +19,7 @@
 
     <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
 
-      <Image Width="500" Source="avares://PINChat.UI.Core/Assets/Images/Logo.png" />
+      <Image Source="avares://PINChat.UI.Core/Assets/Images/Logo.png" />
 
       <!--  UserName  -->
       <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
