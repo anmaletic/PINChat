@@ -12,6 +12,10 @@ public static class ServiceCollectionExtensions
         services
             .AddRefitClient<IAuthApi>()
             .ConfigureHttpClient(client => { client.BaseAddress = apiUrl; });
+        
+        services
+            .AddRefitClient<IChatApi>()
+            .ConfigureHttpClient(client => { client.BaseAddress = apiUrl; });
 
         return services;
     }
