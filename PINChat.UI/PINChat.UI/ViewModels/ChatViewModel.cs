@@ -8,14 +8,17 @@ using Avalonia.Input;
 using Avalonia.Styling;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
+using PINChat.Api.Sdk;
 using PINChat.UI.Core.Interfaces;
 using PINChat.UI.Core.Models;
+using Refit;
 
 namespace PINChat.UI.ViewModels;
 
 public partial class ChatViewModel : ViewModelBase
 {
     private readonly IChatService _chatService;
+    private readonly IChatApi _chatApi;
 
     [ObservableProperty]
     private UserModel _user = new();
@@ -26,13 +29,14 @@ public partial class ChatViewModel : ViewModelBase
     [ObservableProperty]
     private string _newMsgContent = "";
 
-    public ChatViewModel() : this(null!, null!)
+    public ChatViewModel() : this(null!, null!, null!)
     {
     }
 
-    public ChatViewModel(ILoggedInUserService loggedInUserService, IChatService chatService)
+    public ChatViewModel(ILoggedInUserService loggedInUserService, IChatService chatService, IChatApi chatApi)
     {
         _chatService = chatService;
+        _chatApi = chatApi;
 
         User = loggedInUserService.User!;
 
@@ -104,6 +108,60 @@ public partial class ChatViewModel : ViewModelBase
         Console.WriteLine($"Chat Service Connection Status: {isConnected}");
     }
 
+    partial void OnSelectedContactChanged(UserModel value)
+    {
+        LoadChatHistoryForSelectedContact();
+    }
+    
+    private async Task LoadChatHistoryForSelectedContact()
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(User.Token))
+                {
+                    Console.WriteLine("No authentication token available to fetch chat history.");
+                    return;
+                }
+
+                var historyResponse = await _chatApi.GetChatHistory(
+                    SelectedContact.UserId,
+                    $"Bearer {User.Token}"
+                );
+
+                if (historyResponse.IsSuccessStatusCode && historyResponse.Content != null)
+                {
+                    Dispatcher.UIThread.InvokeAsync(() =>
+                    {
+                        foreach (var msgDto in historyResponse.Content.Messages)
+                        {
+                            SelectedContact.Messages.Add(new ChatMessageModel
+                            {
+                                Id = msgDto.Id,
+                                Content = msgDto.Content,
+                                Sender = msgDto.SenderId,
+                                IsOrigin = msgDto.SenderId == User.UserId,
+                                Timestamp = msgDto.Timestamp,
+                                IsSent = msgDto.IsSent,
+                                IsReceived = msgDto.IsReceived,
+                                IsRead = msgDto.IsRead
+                            });
+                        }
+                    });
+                }
+                else
+                {
+                    Console.WriteLine($"Failed to load chat history: {historyResponse.Error?.Content}");
+                }
+            }
+            catch (ApiException ex)
+            {
+                Console.WriteLine($"API Error loading chat history: {ex.Message} - {ex.Content}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"General Error loading chat history: {ex.Message}");
+            }
+        }
 
     [RelayCommand]
     private async Task HandleKeyDown(KeyEventArgs e)
