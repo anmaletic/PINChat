@@ -5,16 +5,22 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
+
+    <ItemGroup>
+        <AvaloniaResource Include="Assets\**" />
+    </ItemGroup>
     
     <ItemGroup>
         <PackageReference Include="Avalonia" />
         <PackageReference Include="CommunityToolkit.Mvvm" />
         <PackageReference Include="FluentValidation" />
         <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" />
+        <PackageReference Include="Deadpikle.AvaloniaProgressRing" />
         <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" />
     </ItemGroup>
     
     <ItemGroup>
       <ProjectReference Include="..\PINChat.Contracts\PINChat.Contracts.csproj" />
     </ItemGroup>
+    
 </Project>

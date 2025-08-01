@@ -12,18 +12,18 @@
   <Application.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
-        <ResourceInclude Source="/Assets/Styles/Colors.axaml" />
+        <ResourceInclude Source="avares://PINChat.UI.Core/Assets/Styles/Colors.axaml" />
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
 
-    <FontFamily x:Key="PoetsenOneFont">Assets\Fonts\#Poetsen One</FontFamily>
-    <FontFamily x:Key="PoppinsRegular">Assets\Fonts\#Poppins Regular</FontFamily>
-    <FontFamily x:Key="PoppinsBold">Assets\Fonts\#Poppins Bold</FontFamily>
+    <FontFamily x:Key="PoetsenOneFont">avares://PINChat.UI.Core/Assets\Fonts\#Poetsen One</FontFamily>
+    <FontFamily x:Key="PoppinsRegular">avares://PINChat.UI.Core/Assets\Fonts\#Poppins Regular</FontFamily>
+    <FontFamily x:Key="PoppinsBold">avares://PINChat.UI.Core/Assets\Fonts\#Poppins Bold</FontFamily>
   </Application.Resources>
 
   <Application.Styles>
     <FluentTheme />
     <StyleInclude Source="avares://AvaloniaProgressRing/Styles/ProgressRing.xaml" />
-    <StyleInclude Source="Assets/Styles/RadioButtonDock.axaml" />
+    <StyleInclude Source="avares://PINChat.UI.Core/Assets/Styles/RadioButtonDock.axaml" />
   </Application.Styles>
 </Application>
