@@ -1,10 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using Avalonia.Media.Imaging;
+using CommunityToolkit.Mvvm.ComponentModel;
 using PINChat.UI.Core.Common;
 
 namespace PINChat.UI.Core.Models;
 
-public class UserModel
+public partial class UserModel : ObservableObject
 {
     public string Token { get; set; }
     public string UserId { get; set; }
@@ -13,6 +14,10 @@ public class UserModel
     public string? LastName { get; set; }
     public byte[]? Avatar { get; set; }
     public string? AvatarPath { get; set; }
+
+    [ObservableProperty]
+    private bool _isTyping;
+    
     public ObservableCollection<UserModel> Contacts { get; set; } = [];
     public ObservableCollection<ChatMessageModel> Messages { get; set; } = [];
 

@@ -38,10 +38,16 @@
                   <Image Width="40" Height="40" Source="{Binding AvatarBitmap}" />
                 </Border>
                 <Label Grid.Column="1"
-                       VerticalContentAlignment="Center"
+                       VerticalContentAlignment="Top"
                        Content="{Binding UserName}"
                        FontFamily="{StaticResource PoetsenOneFont}"
                        FontSize="16" />
+                <Label Grid.Column="1"
+                       VerticalContentAlignment="Bottom"
+                       Content="Typing..."
+                       FontFamily="{StaticResource PoetsenOneFont}"
+                       FontSize="12"
+                       IsVisible="{Binding IsTyping}" />
               </Grid>
             </RadioButton.Content>
           </RadioButton>
