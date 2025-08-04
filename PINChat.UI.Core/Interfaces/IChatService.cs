@@ -13,12 +13,18 @@ public class MessageStatusUpdatedEventArgs(string messageId, string status) : Ev
     public string Status { get; } = status;
 }
 
+public class TypingStatusEventArgs(string userId, bool isTyping) : EventArgs
+{
+    public string UserId { get; } = userId;
+    public bool IsTyping { get; } = isTyping;
+}
+
 public interface IChatService
 {
     event EventHandler<MessageReceivedEventArgs> MessageReceived;
     event EventHandler<MessageStatusUpdatedEventArgs> MessageStatusUpdated;
-    
-    event EventHandler<bool> ConnectionStatusChanged; // True for connected, False for disconnected
+    event EventHandler<bool> ConnectionStatusChanged;
+    event EventHandler<TypingStatusEventArgs> TypingStatusReceived;
 
     bool IsConnected { get; }
 
@@ -28,4 +34,5 @@ public interface IChatService
     Task SendMessageAsync(string recipientId, string content, string tempId);
     Task SendMessageReceivedStatusAsync(string messageId);
     Task SendMessageReadStatusAsync(string messageId);
+    Task SendTypingStatusAsync(string recipientId, bool isTyping);
 }

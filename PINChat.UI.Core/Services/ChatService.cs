@@ -14,6 +14,7 @@ public partial class ChatService : ObservableObject, IChatService
     public event EventHandler<MessageReceivedEventArgs>? MessageReceived;
     public event EventHandler<MessageStatusUpdatedEventArgs>? MessageStatusUpdated;
     public event EventHandler<bool>? ConnectionStatusChanged;
+    public event EventHandler<TypingStatusEventArgs>? TypingStatusReceived;
     
     [ObservableProperty]
     private bool _isConnected;
@@ -41,6 +42,11 @@ public partial class ChatService : ObservableObject, IChatService
             Dispatcher.UIThread.InvokeAsync(() => MessageStatusUpdated?.Invoke(this, new MessageStatusUpdatedEventArgs(messageId, status)));
         });
 
+        _hubConnection.On<string, bool>("ReceiveTypingStatus", (userId, isTyping) =>
+        {
+            Dispatcher.UIThread.InvokeAsync(() => TypingStatusReceived?.Invoke(this, new TypingStatusEventArgs(userId, isTyping)));
+        });
+        
         _hubConnection.Closed += OnConnectionClosed;
         _hubConnection.Reconnecting += OnConnectionReconnecting;
         _hubConnection.Reconnected += OnConnectionReconnected;
@@ -154,5 +160,11 @@ public partial class ChatService : ObservableObject, IChatService
             return;
         }
         await _hubConnection.InvokeAsync("MessageRead", messageId);
+    }
+    
+    public async Task SendTypingStatusAsync(string recipientId, bool isTyping) // RecipientId parameter added back
+    {
+        if (_hubConnection.State != HubConnectionState.Connected) return;
+        await _hubConnection.InvokeAsync("SendTypingStatus", recipientId, isTyping);
     }
 }
