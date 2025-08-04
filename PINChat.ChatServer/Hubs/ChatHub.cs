@@ -131,4 +131,16 @@ public class ChatHub : Hub
             await Clients.Client(senderConnectionId).SendAsync("UpdateMessageStatus", message.Id, "Read");
         }
     }
+    
+    // --- Typing Indicator ---
+    public async Task SendTypingStatus(string recipientId, bool isTyping)
+    {
+        var senderId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (senderId == null) return;
+
+        if (ConnectedUsers.TryGetValue(recipientId, out string? recipientConnectionId))
+        {
+            await Clients.Client(recipientConnectionId).SendAsync("ReceiveTypingStatus", senderId, isTyping);
+        }
+    }
 }
