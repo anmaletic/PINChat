@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -17,6 +17,9 @@ namespace PINChat.UI.ViewModels;
 
 public partial class ChatViewModel : ViewModelBase
 {
+    private CancellationTokenSource? _typingCancellationTokenSource;
+    private const int TypingTimeoutMs = 1500;
+    
     private readonly IChatService _chatService;
     private readonly IChatApi _chatApi;
 
@@ -44,6 +47,7 @@ public partial class ChatViewModel : ViewModelBase
         _chatService.MessageReceived += OnMessageReceived;
         _chatService.MessageStatusUpdated += OnMessageStatusUpdated;
         _chatService.ConnectionStatusChanged += OnConnectionStatusChanged;
+        _chatService.TypingStatusReceived += OnTypingStatusReceived;
 
         _chatService.ConnectAsync();
     }
@@ -107,12 +111,29 @@ public partial class ChatViewModel : ViewModelBase
     {
         Console.WriteLine($"Chat Service Connection Status: {isConnected}");
     }
-
+    
+    private void OnTypingStatusReceived(object? sender, TypingStatusEventArgs e)
+    {
+        Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            var contact = User.Contacts.FirstOrDefault(c => c.UserId == e.UserId);
+            if (contact != null)
+            {
+                contact.IsTyping = e.IsTyping; // Update the IsTyping property directly
+            }
+        });
+    }
+    
     partial void OnSelectedContactChanged(UserModel value)
     {
         LoadChatHistoryForSelectedContact();
     }
-    
+
+    partial void OnNewMsgContentChanged(string value)
+    {
+        _ = SendTypingStatusUpdate();
+    }
+
     private async Task LoadChatHistoryForSelectedContact()
         {
             try
@@ -162,6 +183,37 @@ public partial class ChatViewModel : ViewModelBase
                 Console.WriteLine($"General Error loading chat history: {ex.Message}");
             }
         }
+
+    private async Task SendTypingStatusUpdate()
+    {
+        if (SelectedContact == null || !_chatService.IsConnected)
+        {
+            return;
+        }
+
+        _typingCancellationTokenSource?.Cancel();
+        _typingCancellationTokenSource = new CancellationTokenSource();
+        var token = _typingCancellationTokenSource.Token;
+
+        if (!string.IsNullOrWhiteSpace(NewMsgContent))
+        {
+            await _chatService.SendTypingStatusAsync(SelectedContact.UserId!, true);
+        }
+
+        try
+        {
+            await Task.Delay(TypingTimeoutMs, token);
+            await _chatService.SendTypingStatusAsync(SelectedContact.UserId!, false);
+        }
+        catch (TaskCanceledException)
+        {
+            // User continued typing, so the previous task was cancelled.
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error sending typing status: {ex.Message}");
+        }
+    }
 
     [RelayCommand]
     private async Task HandleKeyDown(KeyEventArgs e)
@@ -222,7 +274,6 @@ public partial class ChatViewModel : ViewModelBase
                 SelectedContact!.Messages.Remove(msg));
         }
     }
-
 
     [RelayCommand]
     private void ChangeTheme()
