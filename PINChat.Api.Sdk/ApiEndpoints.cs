@@ -18,4 +18,11 @@ public static class ApiEndpoints
         
         public const string GetChatHistory = $"{Base}/history/{{ContactId}}";
     }
+    
+    public static class Files
+    {
+        private const string Base = $"{ApiBase}/files";
+        
+        public const string UploadImage = $"{Base}/upload-image";
+    }
 }
