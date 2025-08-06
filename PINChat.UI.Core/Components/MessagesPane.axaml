@@ -83,6 +83,7 @@
                        IsVisible="{Binding MessageType, Converter={x:Static converters:MessageTypeToVisibilityConverter.Image}}"
                        Source="{Binding Image}"
                        Stretch="Uniform" />
+                <ProgressBar Margin="0,3,0,0" IsIndeterminate="True" IsVisible="{Binding IsLoading}" />
               </StackPanel>
               <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
 

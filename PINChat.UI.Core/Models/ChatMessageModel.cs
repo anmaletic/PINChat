@@ -1,5 +1,6 @@
 ﻿using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel.__Internals;
 using PINChat.Core.Domain.Enums;
 using PINChat.UI.Core.Helpers;
 
@@ -29,6 +30,22 @@ public partial class ChatMessageModel : ObservableObject
     [ObservableProperty]
     private bool _isRead;
 
+    [ObservableProperty]
+    private bool _isLoading;
+    
+    partial void OnMessageTypeChanged(MessageType value)
+    {
+        if (value == MessageType.Image)
+        {
+            IsLoading = true;
+            ImagePath = null; // Reset image path to trigger loading
+        }
+        else
+        {
+            Image = null; // Clear image for non-image messages
+        }
+    }
+
     async partial void OnImagePathChanged(string? value)
     {
         if (value is null)
@@ -37,6 +54,7 @@ public partial class ChatMessageModel : ObservableObject
         }
         
         Image = await ImageHelper.LoadFromWeb(new Uri(value));
+        IsLoading = false;
     }
 
     [ObservableProperty]
