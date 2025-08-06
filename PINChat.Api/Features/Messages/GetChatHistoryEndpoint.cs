@@ -50,6 +50,8 @@ public class GetChatHistoryEndpoint : Endpoint<GetChatHistoryRequest, GetChatHis
                 Timestamp = m.Timestamp,
                 SenderId = m.SenderId,
                 RecipientId = m.RecipientId,
+                ImagePath = m.ImagePath,
+                MessageType = m.MessageType,
                 Content = m.Content,
                 IsSent = m.IsSent,
                 IsReceived = m.IsReceived,

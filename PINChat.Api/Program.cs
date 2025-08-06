@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using PINChat.Core.Application;
+using PINChat.Core.Options;
+using PINChat.Persistence.Db.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +16,12 @@ builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddFastEndpoints();
 
 builder.Services.AddScoped<JwtService>();
+
+builder.Services.AddOptions<MinioOptions>()
+    .Bind(builder.Configuration.GetSection("Minio"))
+    .ValidateDataAnnotations();
+
+builder.Services.AddSingleton<IFileService, MinioService>();
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var key = Encoding.ASCII.GetBytes(jwtSettings["Key"]);
