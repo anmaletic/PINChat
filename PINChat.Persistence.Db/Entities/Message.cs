@@ -8,6 +8,9 @@ public class Message
     public required string RecipientId { get; set; }
     public string Content { get; set; } = string.Empty;
     
+    public MessageType MessageType { get; set; } = MessageType.Text;
+    public string? ImagePath { get; set; } 
+    
     public bool IsSent { get; set; } = false;
     public bool IsReceived { get; set; } = false;
     public bool IsRead { get; set; } = false;
