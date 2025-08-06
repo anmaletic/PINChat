@@ -9,8 +9,11 @@ using Avalonia.Styling;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using PINChat.Api.Sdk;
+using PINChat.Core.Domain.Enums;
+using PINChat.UI.Core.Helpers;
 using PINChat.UI.Core.Interfaces;
 using PINChat.UI.Core.Models;
+using PINChat.UI.Core.Services;
 using Refit;
 
 namespace PINChat.UI.ViewModels;
@@ -19,9 +22,11 @@ public partial class ChatViewModel : ViewModelBase
 {
     private CancellationTokenSource? _typingCancellationTokenSource;
     private const int TypingTimeoutMs = 1500;
-    
+
     private readonly IChatService _chatService;
     private readonly IChatApi _chatApi;
+    private readonly DialogService _dialogService;
+    private readonly IMinioFrontendService _minioService;
 
     [ObservableProperty]
     private UserModel _user = new();
@@ -32,14 +37,17 @@ public partial class ChatViewModel : ViewModelBase
     [ObservableProperty]
     private string _newMsgContent = "";
 
-    public ChatViewModel() : this(null!, null!, null!)
+    public ChatViewModel() : this(null!, null!, null!, null!, null!)
     {
     }
 
-    public ChatViewModel(ILoggedInUserService loggedInUserService, IChatService chatService, IChatApi chatApi)
+    public ChatViewModel(ILoggedInUserService loggedInUserService, IChatService chatService, IChatApi chatApi,
+        DialogService dialogService, IMinioFrontendService minioService)
     {
         _chatService = chatService;
         _chatApi = chatApi;
+        _dialogService = dialogService;
+        _minioService = minioService;
 
         User = loggedInUserService.User!;
 
@@ -66,17 +74,8 @@ public partial class ChatViewModel : ViewModelBase
         else if (backendMessage.RecipientId == User.UserId &&
                  backendMessage.SenderId == SelectedContact.UserId)
         {
-            var incomingMsg = new ChatMessageModel
-            {
-                Id = backendMessage.Id,
-                Content = backendMessage.Content,
-                Sender = backendMessage.SenderId, 
-                IsOrigin = false,
-                Timestamp = backendMessage.Timestamp,
-                IsSent = backendMessage.IsSent,
-                IsReceived = backendMessage.IsReceived,
-                IsRead = backendMessage.IsRead
-            };
+            var incomingMsg = backendMessage.ToModel();
+            
             SelectedContact.Messages.Add(incomingMsg);
 
             _ = _chatService.SendMessageReceivedStatusAsync(incomingMsg.Id);
@@ -111,7 +110,7 @@ public partial class ChatViewModel : ViewModelBase
     {
         Console.WriteLine($"Chat Service Connection Status: {isConnected}");
     }
-    
+
     private void OnTypingStatusReceived(object? sender, TypingStatusEventArgs e)
     {
         Dispatcher.UIThread.InvokeAsync(() =>
@@ -123,7 +122,7 @@ public partial class ChatViewModel : ViewModelBase
             }
         });
     }
-    
+
     partial void OnSelectedContactChanged(UserModel value)
     {
         LoadChatHistoryForSelectedContact();
@@ -135,54 +134,58 @@ public partial class ChatViewModel : ViewModelBase
     }
 
     private async Task LoadChatHistoryForSelectedContact()
+    {
+        try
         {
-            try
+            if (string.IsNullOrEmpty(User.Token))
             {
-                if (string.IsNullOrEmpty(User.Token))
-                {
-                    Console.WriteLine("No authentication token available to fetch chat history.");
-                    return;
-                }
+                Console.WriteLine("No authentication token available to fetch chat history.");
+                return;
+            }
+            
+            SelectedContact.Messages.Clear();
 
-                var historyResponse = await _chatApi.GetChatHistory(
-                    SelectedContact.UserId,
-                    $"Bearer {User.Token}"
-                );
+            var historyResponse = await _chatApi.GetChatHistory(
+                SelectedContact.UserId,
+                $"Bearer {User.Token}"
+            );
 
-                if (historyResponse.IsSuccessStatusCode && historyResponse.Content != null)
+            if (historyResponse.IsSuccessStatusCode && historyResponse.Content != null)
+            {
+                Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    Dispatcher.UIThread.InvokeAsync(() =>
+                    foreach (var msgDto in historyResponse.Content.Messages)
                     {
-                        foreach (var msgDto in historyResponse.Content.Messages)
+                        SelectedContact.Messages.Add(new ChatMessageModel
                         {
-                            SelectedContact.Messages.Add(new ChatMessageModel
-                            {
-                                Id = msgDto.Id,
-                                Content = msgDto.Content,
-                                Sender = msgDto.SenderId,
-                                IsOrigin = msgDto.SenderId == User.UserId,
-                                Timestamp = msgDto.Timestamp,
-                                IsSent = msgDto.IsSent,
-                                IsReceived = msgDto.IsReceived,
-                                IsRead = msgDto.IsRead
-                            });
-                        }
-                    });
-                }
-                else
-                {
-                    Console.WriteLine($"Failed to load chat history: {historyResponse.Error?.Content}");
-                }
+                            Id = msgDto.Id,
+                            Content = msgDto.Content,
+                            Sender = msgDto.SenderId,
+                            MessageType = msgDto.MessageType,
+                            ImagePath = msgDto.ImagePath,
+                            IsOrigin = msgDto.SenderId == User.UserId,
+                            Timestamp = msgDto.Timestamp,
+                            IsSent = msgDto.IsSent,
+                            IsReceived = msgDto.IsReceived,
+                            IsRead = msgDto.IsRead,
+                        });
+                    }
+                });
             }
-            catch (ApiException ex)
+            else
             {
-                Console.WriteLine($"API Error loading chat history: {ex.Message} - {ex.Content}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"General Error loading chat history: {ex.Message}");
+                Console.WriteLine($"Failed to load chat history: {historyResponse.Error?.Content}");
             }
         }
+        catch (ApiException ex)
+        {
+            Console.WriteLine($"API Error loading chat history: {ex.Message} - {ex.Content}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"General Error loading chat history: {ex.Message}");
+        }
+    }
 
     private async Task SendTypingStatusUpdate()
     {
@@ -254,6 +257,7 @@ public partial class ChatViewModel : ViewModelBase
             Timestamp = DateTime.Now,
             Sender = User.UserName!,
             Content = NewMsgContent,
+            MessageType = MessageType.Text,
             IsSent = true,
             IsReceived = false,
             IsRead = false,
@@ -265,13 +269,71 @@ public partial class ChatViewModel : ViewModelBase
 
         try
         {
-            await _chatService.SendMessageAsync(SelectedContact!.UserId, msg.Content, tempMsgId);
+            await _chatService.SendMessageAsync(SelectedContact!.UserId, msg.Content, tempMsgId, msg.MessageType, null);
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error sending message via chat service: {ex.Message}");
             await Dispatcher.UIThread.InvokeAsync(() =>
                 SelectedContact!.Messages.Remove(msg));
+        }
+    }
+
+    [RelayCommand]
+    private async Task SelectAndSendImage()
+    {
+        if (SelectedContact == null || !_chatService.IsConnected)
+        {
+            Console.WriteLine("Cannot send image: no contact selected, not logged in, or chat service not connected.");
+            return;
+        }
+
+        var file = await _dialogService.ShowFilePicker();
+
+        if (file is not null)
+        {
+            ChatMessageModel msg = new();
+            
+            try
+            {
+                await using var stream = await file.OpenReadAsync();
+                var fileName = file.Name;
+                var contentType = ContentTypeHelper.GetType(fileName);
+
+                var tempMsgId = Guid.NewGuid().ToString();
+                msg = new ChatMessageModel
+                {
+                    Id = tempMsgId,
+                    Timestamp = DateTime.Now,
+                    Sender = User.UserName ?? "Unknown",
+                    IsOrigin = true,
+                    Content = "Uploading image...",
+                    MessageType = MessageType.Image,
+                    ImagePath = null,
+                    IsSent = false,
+                    IsReceived = false,
+                    IsRead = false
+                };
+                SelectedContact.Messages.Add(msg);
+
+                // Upload image to MinIO via backend API
+                var imageUrl = await _minioService.UploadImageAsync(stream, fileName, contentType);
+                Console.WriteLine($"Image uploaded via backend: {imageUrl}");
+                
+                await Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    msg.ImagePath = imageUrl;
+                    msg.Content = "";
+                    msg.IsSent = true;
+                });
+                
+                await _chatService.SendMessageAsync(SelectedContact.UserId,string.Empty, tempMsgId, MessageType.Image, imageUrl);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error sending image: {ex.Message}");
+                Dispatcher.UIThread.InvokeAsync(() => SelectedContact.Messages.Remove(msg));
+            }
         }
     }
 

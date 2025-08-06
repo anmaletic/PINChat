@@ -1,5 +1,7 @@
+using System;
 using System.Linq;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
@@ -66,10 +68,21 @@ namespace PINChat.UI
             Ioc.Default.ConfigureServices(new ServiceCollection()
                 // .AddSingleton<GlobalErrorHandler>()
                 .AddSingleton<MainWindow>()
+                .AddSingleton<DialogService>()
+                .AddSingleton<Func<TopLevel?>>(x=> () =>
+                {
+                    return ApplicationLifetime switch
+                    {
+                        IClassicDesktopStyleApplicationLifetime topWindow => TopLevel.GetTopLevel(topWindow.MainWindow),
+                        ISingleViewApplicationLifetime singleViewPlatform => TopLevel.GetTopLevel(singleViewPlatform.MainView),
+                        _ => null
+                    };
+                })
                 .AddViewModels()
                 .AddViewManager()
                 .AddApiSdk()
                 .AddSingleton<IChatService, ChatService>()
+                .AddSingleton<IMinioFrontendService, MinioFrontendService>()
                 .AddSingleton<ILoggedInUserService, LoggedInUserService>()
                 .BuildServiceProvider());
         }
