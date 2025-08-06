@@ -29,18 +29,18 @@ public partial class ChatMessageModel : ObservableObject
     [ObservableProperty]
     private bool _isRead;
 
-    partial void OnImagePathChanged(string? value)
+    async partial void OnImagePathChanged(string? value)
     {
         if (value is null)
         {
             return;
         }
         
-        Image = ImageHelper.LoadFromWeb(new Uri(value));
+        Image = await ImageHelper.LoadFromWeb(new Uri(value));
     }
 
     [ObservableProperty]
-    public Task<Bitmap?> _image;
+    private Bitmap? _image = ImageHelper.LoadFromResource(new Uri("avares://PINChat.UI.Core/Assets/Images/msg-placeholder.png"));
 
     public bool IsOrigin { get; set; } 
 }

@@ -81,7 +81,7 @@
                 <Image MaxWidth="250" MaxHeight="250"
                        Margin="0,5,0,0"
                        IsVisible="{Binding MessageType, Converter={x:Static converters:MessageTypeToVisibilityConverter.Image}}"
-                       Source="{Binding Image^}"
+                       Source="{Binding Image}"
                        Stretch="Uniform" />
               </StackPanel>
               <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
