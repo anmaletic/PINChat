@@ -44,7 +44,7 @@
 
       <ListBox.ItemsPanel>
         <ItemsPanelTemplate>
-          <VirtualizingStackPanel Orientation="Vertical" />
+          <StackPanel Orientation="Vertical" />
         </ItemsPanelTemplate>
       </ListBox.ItemsPanel>
 
@@ -75,7 +75,6 @@
                 <TextBlock MaxWidth="400"
                            FontSize="12"
                            Foreground="{DynamicResource FontColor1}"
-                           IsVisible="{Binding MessageType, Converter={x:Static converters:MessageTypeToVisibilityConverter.Text}}"
                            Text="{Binding Content}"
                            TextWrapping="Wrap" />
 

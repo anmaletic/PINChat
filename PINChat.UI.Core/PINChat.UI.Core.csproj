@@ -17,9 +17,11 @@
         <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" />
         <PackageReference Include="Deadpikle.AvaloniaProgressRing" />
         <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" />
+        <PackageReference Include="Refit" />
     </ItemGroup>
     
     <ItemGroup>
+      <ProjectReference Include="..\PINChat.Api.Sdk\PINChat.Api.Sdk.csproj" />
       <ProjectReference Include="..\PINChat.Contracts\PINChat.Contracts.csproj" />
       <ProjectReference Include="..\PINChat.Core\PINChat.Core.csproj" />
     </ItemGroup>
