@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using PINChat.ChatServer.Mapping;
+using PINChat.Core.Domain.Enums;
 using PINChat.Persistence.Db.Contexts;
 using PINChat.Persistence.Db.Entities;
 
@@ -42,7 +43,7 @@ public class ChatHub : Hub
         await base.OnDisconnectedAsync(exception);
     }
 
-    public async Task SendMessage(string recipientId, string content, string tempMsgId)
+    public async Task SendMessage(string recipientId, string content, string tempMsgId, MessageType messageType, string? imagePath)
     {
         var senderId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (senderId == null)
@@ -63,6 +64,8 @@ public class ChatHub : Hub
             SenderId = senderId,
             RecipientId = recipientId,
             Content = content,
+            MessageType = messageType,
+            ImagePath = imagePath,
             IsSent = true,
             IsReceived = false,
             IsRead = false

@@ -14,6 +14,8 @@ public static class ContractMapping
             SenderId = message.SenderId,
             RecipientId = message.RecipientId,
             Content = message.Content,
+            MessageType = message.MessageType,
+            ImagePath = message.ImagePath,
             IsSent = message.IsSent,
             IsReceived = message.IsReceived,
             IsRead = message.IsRead
