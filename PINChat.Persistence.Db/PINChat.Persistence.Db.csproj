@@ -19,6 +19,11 @@
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
+      <PackageReference Include="Minio" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\PINChat.Core\PINChat.Core.csproj" />
     </ItemGroup>
 
 </Project>
