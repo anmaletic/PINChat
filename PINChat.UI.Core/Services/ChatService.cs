@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.AspNetCore.SignalR.Client;
 using PINChat.Contracts.Responses;
+using PINChat.Core.Domain.Enums;
 using PINChat.UI.Core.Interfaces;
 
 namespace PINChat.UI.Core.Services;
@@ -134,14 +135,14 @@ public partial class ChatService : ObservableObject, IChatService
         }
     }
     
-    public async Task SendMessageAsync(string recipientId, string content, string tempId)
+    public async Task SendMessageAsync(string recipientId, string content, string tempId, MessageType messageType, string? imagePath)
     {
         if (_hubConnection.State != HubConnectionState.Connected)
         {
             Console.WriteLine("Cannot send message: Hub not connected.");
             throw new InvalidOperationException("Chat service is not connected.");
         }
-        await _hubConnection.InvokeAsync("SendMessage", recipientId, content, tempId);
+        await _hubConnection.InvokeAsync("SendMessage", recipientId, content, tempId, messageType, imagePath);
     }
     
     public async Task SendMessageReceivedStatusAsync(string messageId)

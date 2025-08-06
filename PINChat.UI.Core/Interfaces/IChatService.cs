@@ -1,4 +1,5 @@
 ﻿using PINChat.Contracts.Responses;
+using PINChat.Core.Domain.Enums;
 
 namespace PINChat.UI.Core.Interfaces;
 
@@ -31,7 +32,7 @@ public interface IChatService
     Task ConnectAsync();
     Task DisconnectAsync();
 
-    Task SendMessageAsync(string recipientId, string content, string tempId);
+    Task SendMessageAsync(string recipientId, string? content, string tempId, MessageType messageType, string? imagePath);
     Task SendMessageReceivedStatusAsync(string messageId);
     Task SendMessageReadStatusAsync(string messageId);
     Task SendTypingStatusAsync(string recipientId, bool isTyping);

@@ -21,6 +21,7 @@
     
     <ItemGroup>
       <ProjectReference Include="..\PINChat.Contracts\PINChat.Contracts.csproj" />
+      <ProjectReference Include="..\PINChat.Core\PINChat.Core.csproj" />
     </ItemGroup>
     
 </Project>
