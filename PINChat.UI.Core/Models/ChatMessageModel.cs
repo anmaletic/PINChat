@@ -10,7 +10,9 @@ public partial class ChatMessageModel : ObservableObject
     public string Id { get; set; }
     public DateTime Timestamp { get; set; } = DateTime.Now;
     public string Sender { get; set; } = "";
-    public string Content { get; set; } = "";
+    
+    [ObservableProperty]
+    private string _content = "";
     
     [ObservableProperty]
     private MessageType _messageType = MessageType.Text;
@@ -26,11 +28,19 @@ public partial class ChatMessageModel : ObservableObject
     
     [ObservableProperty]
     private bool _isRead;
-    
-    public Task<Bitmap?> Image => 
-        ImagePath is not null 
-            ? ImageHelper.LoadFromWeb(new Uri(ImagePath)) 
-            : Task.FromResult<Bitmap>(null);
+
+    partial void OnImagePathChanged(string? value)
+    {
+        if (value is null)
+        {
+            return;
+        }
+        
+        Image = ImageHelper.LoadFromWeb(new Uri(value));
+    }
+
+    [ObservableProperty]
+    public Task<Bitmap?> _image;
 
     public bool IsOrigin { get; set; } 
 }

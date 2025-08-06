@@ -28,4 +28,25 @@ public static class Mapping
             }))
         };
     }
+    
+    public static ChatMessageModel ToModel(this MessageResponse message)
+    {
+        return new ChatMessageModel
+        {
+            Id = message.Id,
+            Timestamp = message.Timestamp,
+            Sender = message.SenderId,
+            Content = message.Content,
+            MessageType = message.MessageType,
+            ImagePath = message.ImagePath,
+            IsSent = message.IsSent,
+            IsReceived = message.IsReceived,
+            IsRead = message.IsRead
+        };
+    }
+    
+    public static IEnumerable<ChatMessageModel> ToModels(this IEnumerable<MessageResponse> messages)
+    {
+        return messages.Select(m => m.ToModel());
+    }
 }
