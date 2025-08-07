@@ -4,87 +4,99 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using CommunityToolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.Messaging;
 using PINChat.Api.Sdk;
 using PINChat.UI.Core.Interfaces;
+using PINChat.UI.Core.Messages;
 using PINChat.UI.Core.Services;
 
-namespace PINChat.UI
+namespace PINChat.UI;
+
+public partial class App : Application
 {
-    public partial class App : Application
+    public App()
     {
-        public App()
-        {
-            ConfigureServices();
-        }
+        ConfigureServices();
+    }
         
-        public override void Initialize()
-        {
-            AvaloniaXamlLoader.Load(this);
+    public override void Initialize()
+    {
+        AvaloniaXamlLoader.Load(this);
 
-            this.AttachDeveloperTools();
-        }
+        this.AttachDeveloperTools();
+    }
 
-        public override void OnFrameworkInitializationCompleted()
+    public override void OnFrameworkInitializationCompleted()
+    {
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            {
-                // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
-                // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
-                DisableAvaloniaDataAnnotationValidation();
+            // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
+            // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
+            DisableAvaloniaDataAnnotationValidation();
                 
-                desktop.MainWindow = new MainWindow
-                {
-                    DataContext = Ioc.Default.GetService<MainViewModel>()
-                };
-            }
-            else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
+            desktop.MainWindow = new MainWindow
             {
-                singleViewPlatform.MainView = new MainView
-                {
-                    DataContext = Ioc.Default.GetService<MainViewModel>()
-                };
-            }
-
-            base.OnFrameworkInitializationCompleted();
+                DataContext = Ioc.Default.GetService<MainViewModel>()
+            };
         }
-
-        private void DisableAvaloniaDataAnnotationValidation()
+        else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
-            // Get an array of plugins to remove
-            var dataValidationPluginsToRemove =
-                BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
-
-            // remove each entry found
-            foreach (var plugin in dataValidationPluginsToRemove)
+            singleViewPlatform.MainView = new MainView
             {
-                BindingPlugins.DataValidators.Remove(plugin);
-            }
+                DataContext = Ioc.Default.GetService<MainViewModel>()
+            };
+
+            singleViewPlatform.MainView.Loaded += (_, _) =>
+                TopLevel.GetTopLevel(singleViewPlatform.MainView)!.BackRequested += OnBackRequested;
         }
+
+        base.OnFrameworkInitializationCompleted();
+    }
+    private void OnBackRequested(object? sender, RoutedEventArgs e)
+    {
+        StrongReferenceMessenger.Default.Send(new OnBackPressedMessage());
+
+        e.Handled = true;
+
+    }
+
+    private void DisableAvaloniaDataAnnotationValidation()
+    {
+        // Get an array of plugins to remove
+        var dataValidationPluginsToRemove =
+            BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
+
+        // remove each entry found
+        foreach (var plugin in dataValidationPluginsToRemove)
+        {
+            BindingPlugins.DataValidators.Remove(plugin);
+        }
+    }
         
-        private void ConfigureServices()
-        {
-            Ioc.Default.ConfigureServices(new ServiceCollection()
-                // .AddSingleton<GlobalErrorHandler>()
-                .AddSingleton<MainWindow>()
-                .AddSingleton<DialogService>()
-                .AddSingleton<Func<TopLevel?>>(x=> () =>
+    private void ConfigureServices()
+    {
+        Ioc.Default.ConfigureServices(new ServiceCollection()
+            // .AddSingleton<GlobalErrorHandler>()
+            .AddSingleton<MainWindow>()
+            .AddSingleton<DialogService>()
+            .AddSingleton<Func<TopLevel?>>(x=> () =>
+            {
+                return ApplicationLifetime switch
                 {
-                    return ApplicationLifetime switch
-                    {
-                        IClassicDesktopStyleApplicationLifetime topWindow => TopLevel.GetTopLevel(topWindow.MainWindow),
-                        ISingleViewApplicationLifetime singleViewPlatform => TopLevel.GetTopLevel(singleViewPlatform.MainView),
-                        _ => null
-                    };
-                })
-                .AddViewModels()
-                .AddViewManager()
-                .AddApiSdk()
-                .AddSingleton<IChatService, ChatService>()
-                .AddSingleton<IMinioFrontendService, MinioFrontendService>()
-                .AddSingleton<ILoggedInUserService, LoggedInUserService>()
-                .BuildServiceProvider());
-        }
+                    IClassicDesktopStyleApplicationLifetime topWindow => TopLevel.GetTopLevel(topWindow.MainWindow),
+                    ISingleViewApplicationLifetime singleViewPlatform => TopLevel.GetTopLevel(singleViewPlatform.MainView),
+                    _ => null
+                };
+            })
+            .AddViewModels()
+            .AddViewManager()
+            .AddApiSdk()
+            .AddSingleton<IChatService, ChatService>()
+            .AddSingleton<IMinioFrontendService, MinioFrontendService>()
+            .AddSingleton<ILoggedInUserService, LoggedInUserService>()
+            .BuildServiceProvider());
     }
 }

@@ -33,7 +33,8 @@ public static class ServiceCollectionExtensions
             builder.RegisterView<SignInMobileView, SignInViewModel>("SignInMobileView");
             builder.RegisterView<SignUpMobileView, SignUpViewModel>("SignUpMobileView");
             
-            builder.RegisterView<ChatView, ChatViewModel>();
+            builder.RegisterView<ChatView, ChatViewModel>("ChatView");
+            builder.RegisterView<ChatMobileView, ChatViewModel>("ChatMobileView");
         });
 
         return services;

@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
-using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using PINChat.UI.Core.Helpers;
 using PINChat.UI.Core.Messages;
 using PINChat.UI.ViewManager.Interfaces;
 
@@ -39,6 +39,11 @@ public partial class MainViewModel : ViewModelBase
     
     private void ShowView(string viewName)
     {
-        CurrentView = _viewManager.GetView(viewName);
+        CurrentView = viewName switch
+        {
+            "ChatViewModel" => _viewManager.GetView(PlatformHelper.ChatView),
+            "LoginViewModel" => _viewManager.GetView(viewName),
+            _ => CurrentView
+        };
     }
 }
