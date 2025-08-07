@@ -8,10 +8,13 @@ using Avalonia.Input;
 using Avalonia.Styling;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using PINChat.Api.Sdk;
 using PINChat.Core.Domain.Enums;
+using PINChat.UI.Core.Extensions;
 using PINChat.UI.Core.Helpers;
 using PINChat.UI.Core.Interfaces;
+using PINChat.UI.Core.Messages;
 using PINChat.UI.Core.Models;
 using PINChat.UI.Core.Services;
 using Refit;
@@ -23,6 +26,7 @@ public partial class ChatViewModel : ViewModelBase
     private CancellationTokenSource? _typingCancellationTokenSource;
     private const int TypingTimeoutMs = 1500;
 
+    private readonly ILoggedInUserService _loggedInUserService;
     private readonly IChatService _chatService;
     private readonly IChatApi _chatApi;
     private readonly DialogService _dialogService;
@@ -37,6 +41,9 @@ public partial class ChatViewModel : ViewModelBase
     [ObservableProperty]
     private string _newMsgContent = "";
 
+    [ObservableProperty]
+    private bool _isMobileMessagesPaneVisible;
+
     public ChatViewModel() : this(null!, null!, null!, null!, null!)
     {
     }
@@ -44,12 +51,15 @@ public partial class ChatViewModel : ViewModelBase
     public ChatViewModel(ILoggedInUserService loggedInUserService, IChatService chatService, IChatApi chatApi,
         DialogService dialogService, IMinioFrontendService minioService)
     {
+        StrongReferenceMessenger.Default.Register<OnBackPressedMessage>(this, OnBackPressedMessageReceived);
+
+        _loggedInUserService = loggedInUserService;
         _chatService = chatService;
         _chatApi = chatApi;
         _dialogService = dialogService;
         _minioService = minioService;
 
-        User = loggedInUserService.User!;
+        User = _loggedInUserService.User!;
 
         // Subscribe to chat service events
         _chatService.MessageReceived += OnMessageReceived;
@@ -75,7 +85,7 @@ public partial class ChatViewModel : ViewModelBase
                  backendMessage.SenderId == SelectedContact.UserId)
         {
             var incomingMsg = backendMessage.ToModel();
-            
+
             SelectedContact.Messages.Add(incomingMsg);
 
             _ = _chatService.SendMessageReceivedStatusAsync(incomingMsg.Id);
@@ -125,7 +135,13 @@ public partial class ChatViewModel : ViewModelBase
 
     partial void OnSelectedContactChanged(UserModel value)
     {
-        LoadChatHistoryForSelectedContact();
+        if (value is null)
+        {
+            return;
+        }
+
+        _ = LoadChatHistoryForSelectedContact();
+        IsMobileMessagesPaneVisible = true;
     }
 
     partial void OnNewMsgContentChanged(string value)
@@ -142,7 +158,7 @@ public partial class ChatViewModel : ViewModelBase
                 Console.WriteLine("No authentication token available to fetch chat history.");
                 return;
             }
-            
+
             SelectedContact.Messages.Clear();
 
             var historyResponse = await _chatApi.GetChatHistory(
@@ -154,22 +170,10 @@ public partial class ChatViewModel : ViewModelBase
             {
                 Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    foreach (var msgDto in historyResponse.Content.Messages)
-                    {
-                        SelectedContact.Messages.Add(new ChatMessageModel
-                        {
-                            Id = msgDto.Id,
-                            Content = msgDto.Content,
-                            Sender = msgDto.SenderId,
-                            MessageType = msgDto.MessageType,
-                            ImagePath = msgDto.ImagePath,
-                            IsOrigin = msgDto.SenderId == User.UserId,
-                            Timestamp = msgDto.Timestamp,
-                            IsSent = msgDto.IsSent,
-                            IsReceived = msgDto.IsReceived,
-                            IsRead = msgDto.IsRead,
-                        });
-                    }
+                    var msgs = historyResponse.Content.Messages.ToModels().ToList();
+                    msgs.UpdateMessageOrigin(User.UserId);
+
+                    SelectedContact.Messages.AddRange(msgs);
                 });
             }
             else
@@ -293,7 +297,7 @@ public partial class ChatViewModel : ViewModelBase
         if (file is not null)
         {
             ChatMessageModel msg = new();
-            
+
             try
             {
                 await using var stream = await file.OpenReadAsync();
@@ -319,15 +323,16 @@ public partial class ChatViewModel : ViewModelBase
                 // Upload image to MinIO via backend API
                 var imageUrl = await _minioService.UploadImageAsync(stream, fileName, contentType);
                 Console.WriteLine($"Image uploaded via backend: {imageUrl}");
-                
+
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
                     msg.ImagePath = imageUrl;
                     msg.Content = "";
                     msg.IsSent = true;
                 });
-                
-                await _chatService.SendMessageAsync(SelectedContact.UserId,string.Empty, tempMsgId, MessageType.Image, imageUrl);
+
+                await _chatService.SendMessageAsync(SelectedContact.UserId, string.Empty, tempMsgId, MessageType.Image,
+                    imageUrl);
             }
             catch (Exception ex)
             {
@@ -346,5 +351,25 @@ public partial class ChatViewModel : ViewModelBase
                 ? ThemeVariant.Dark
                 : ThemeVariant.Light;
         }
+    }
+
+    [RelayCommand]
+    private void Logout()
+    {
+        _loggedInUserService.ClearUser();
+
+        StrongReferenceMessenger.Default.UnregisterAll(this);
+        StrongReferenceMessenger.Default.Send(new ChangeViewMessage(nameof(LoginViewModel)));
+    }
+
+    private void OnBackPressedMessageReceived(object recipient, OnBackPressedMessage message)
+    {
+        if (!PlatformHelper.IsMobile())
+        {
+            return;
+        }
+
+        IsMobileMessagesPaneVisible = false;
+        SelectedContact = null!;
     }
 }

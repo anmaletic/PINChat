@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="PINChat.UI.Views.ChatView"
+﻿<UserControl x:Class="PINChat.UI.Views.Mobile.ChatMobileView"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:components="clr-namespace:PINChat.UI.Core.Components;assembly=PINChat.UI.Core"
@@ -7,7 +7,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:PINChat.UI.ViewModels"
              d:DesignHeight="800"
-             d:DesignWidth="1300"
+             d:DesignWidth="400"
              x:DataType="vm:ChatViewModel"
              Background="{DynamicResource Background}"
              mc:Ignorable="d">
@@ -15,86 +15,76 @@
     <vm:ChatViewModel />
   </Design.DataContext>
 
-  <Grid ColumnDefinitions="60, 350, *">
+  <Grid>
 
-    <Grid Grid.Column="0" Background="{DynamicResource ColorBrush3}">
-      <Grid.Styles>
-        <Style Selector="Button">
-          <Setter Property="Width" Value="40" />
-          <Setter Property="Height" Value="40" />
-          <Setter Property="HorizontalAlignment" Value="Center" />
-          <Setter Property="CornerRadius" Value="15" />
-          <Setter Property="Background" Value="{DynamicResource ColorBrush1}" />
-        </Style>
-
-        <Style Selector="fa|Icon">
-          <Setter Property="HorizontalAlignment" Value="Center" />
-          <Setter Property="VerticalAlignment" Value="Center" />
-          <Setter Property="FontSize" Value="18" />
-          <Setter Property="Foreground" Value="{DynamicResource ColorBrush4}" />
-        </Style>
-      </Grid.Styles>
-
-      <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top">
-        <StackPanel.Styles>
+    <Grid ColumnDefinitions="60, *" IsVisible="{Binding !IsMobileMessagesPaneVisible}">
+      <Grid Grid.Column="0" Background="{DynamicResource ColorBrush3}">
+        <Grid.Styles>
           <Style Selector="Button">
-            <Setter Property="Margin" Value="0,10,0,0" />
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="CornerRadius" Value="15" />
+            <Setter Property="Background" Value="{DynamicResource ColorBrush1}" />
           </Style>
-        </StackPanel.Styles>
 
-        <Button>
-          <fa:Icon Value="fa-solid fa-message" />
-        </Button>
-        <Button>
-          <fa:Icon Value="fa-solid fa-address-book" />
-        </Button>
-        <Button>
-          <fa:Icon Value="fa-solid fa-people-group" />
-        </Button>
-      </StackPanel>
-
-      <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
-        <StackPanel.Styles>
-          <Style Selector="Button">
-            <Setter Property="Margin" Value="0,0,0,10" />
+          <Style Selector="fa|Icon">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="Foreground" Value="{DynamicResource ColorBrush4}" />
           </Style>
-        </StackPanel.Styles>
+        </Grid.Styles>
 
-        <Button Command="{Binding ChangeThemeCommand}">
-          <fa:Icon Value="fa-solid fa-circle-half-stroke" />
-        </Button>
+        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top">
+          <StackPanel.Styles>
+            <Style Selector="Button">
+              <Setter Property="Margin" Value="0,10,0,0" />
+            </Style>
+          </StackPanel.Styles>
 
-        <Button>
-          <fa:Icon Value="fa-solid fa-gear" />
-        </Button>
-        <Button>
-          <Image Width="30" Height="30" Source="{Binding User.AvatarBitmap}" />
-        </Button>
-        <Button Command="{Binding LogoutCommand}">
-          <fa:Icon Value="fa-solid fa-arrow-right-from-bracket" />
-        </Button>
-      </StackPanel>
+          <Button>
+            <fa:Icon Value="fa-solid fa-message" />
+          </Button>
+          <Button>
+            <fa:Icon Value="fa-solid fa-address-book" />
+          </Button>
+          <Button>
+            <fa:Icon Value="fa-solid fa-people-group" />
+          </Button>
+        </StackPanel>
+
+        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
+          <StackPanel.Styles>
+            <Style Selector="Button">
+              <Setter Property="Margin" Value="0,0,0,10" />
+            </Style>
+          </StackPanel.Styles>
+
+          <Button Command="{Binding ChangeThemeCommand}">
+            <fa:Icon Value="fa-solid fa-circle-half-stroke" />
+          </Button>
+
+          <Button>
+            <fa:Icon Value="fa-solid fa-gear" />
+          </Button>
+          <Button>
+            <Image Width="30" Height="30" Source="{Binding User.AvatarBitmap}" />
+          </Button>
+        </StackPanel>
+      </Grid>
+
+      <components:ContactsPane Grid.Column="1" Margin="10" Contacts="{Binding User.Contacts}" SelectedContact="{Binding SelectedContact, Mode=TwoWay}" />
+
     </Grid>
 
-    <Grid Grid.Column="1">
-      <components:ContactsPane Margin="10" Contacts="{Binding User.Contacts}" SelectedContact="{Binding SelectedContact, Mode=TwoWay}" />
-
-      <Border Width="1" HorizontalAlignment="Right" BorderBrush="#666666" BorderThickness="1" />
-    </Grid>
-
-    <Grid Grid.Column="2">
+    <Grid IsVisible="{Binding IsMobileMessagesPaneVisible}">
       <Grid RowDefinitions="60, *, Auto">
 
         <Grid Grid.Row="0">
           <Border Margin="20,20,20,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                   Background="{DynamicResource Color2}"
-                  CornerRadius="15">
-            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
-                       FontFamily="{DynamicResource PoppinsRegular}"
-                       FontSize="16" FontWeight="Bold"
-                       Foreground="{DynamicResource FontColor1}"
-                       Text="{Binding SelectedContact.UserName}" />
-          </Border>
+                  CornerRadius="15" />
         </Grid>
 
         <components:MessagesPane Grid.Row="1" Margin="10,0" Messages="{Binding SelectedContact.Messages}" />
@@ -138,4 +128,5 @@
       </Grid>
     </Grid>
   </Grid>
+
 </UserControl>
