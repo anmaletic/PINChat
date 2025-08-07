@@ -1,0 +1,26 @@
+﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+USER $APP_UID
+WORKDIR /app
+EXPOSE 8080
+EXPOSE 8081
+
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+COPY ["PINChat.ChatServer/PINChat.ChatServer.csproj", "PINChat.ChatServer/"]
+COPY ["PINChat.Persistence.Db/PINChat.Persistence.Db.csproj", "PINChat.Persistence.Db/"]
+COPY ["PINChat.Core/PINChat.Core.csproj", "PINChat.Core/"]
+COPY ["PINChat.Contracts/PINChat.Contracts.csproj", "PINChat.Contracts/"]
+RUN dotnet restore "PINChat.ChatServer/PINChat.ChatServer.csproj"
+COPY . .
+WORKDIR "/src/PINChat.ChatServer"
+RUN dotnet build "./PINChat.ChatServer.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./PINChat.ChatServer.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "PINChat.ChatServer.dll"]
