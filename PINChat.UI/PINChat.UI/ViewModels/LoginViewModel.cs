@@ -1,15 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Avalonia.Controls;
-using CommunityToolkit.Mvvm.Input;
+﻿using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Messaging;
-using FluentValidation;
-using PINChat.Api.Sdk;
-using PINChat.UI.Core.Components;
-using PINChat.UI.Core.Interfaces;
+using PINChat.UI.Core.Helpers;
 using PINChat.UI.Core.Messages;
-using PINChat.UI.Core.Models;
 using PINChat.UI.ViewManager.Interfaces;
 
 namespace PINChat.UI.ViewModels;
@@ -23,7 +15,6 @@ public partial class LoginViewModel : LoadableViewModelBase
 
     public LoginViewModel() : this(null!)
     {
-        // Default constructor for design-time data or testing purposes
     }
     
     public LoginViewModel(IViewManager viewManager)
@@ -47,12 +38,20 @@ public partial class LoginViewModel : LoadableViewModelBase
 
     private void InitializeDefaultView()
     {
-        ShowView(nameof(SignInViewModel));
+        ShowView(PlatformHelper.SignInView);
     }
     
     private void OnChangeViewMessageReceived(object recipient, ChangeLoginViewMessage msg)
     {
-        ShowView(msg.View);
+        switch (msg.View)
+        {
+            case "SignUpViewModel":
+                ShowView(PlatformHelper.SignUpView);
+                return;
+            case "SignInViewModel":
+                ShowView(PlatformHelper.SignInView);
+                return;
+        }
     }
     
     private void ShowView(string viewName)
