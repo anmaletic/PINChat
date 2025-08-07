@@ -1,5 +1,6 @@
 ﻿using Android.App;
 using Android.Content.PM;
+using Android.Views;
 using Avalonia;
 using Avalonia.Android;
 using Projektanker.Icons.Avalonia;
@@ -10,7 +11,8 @@ namespace PINChat.UI.Android
     [Activity(
         Label = "PINChat.UI.Android",
         Theme = "@style/MyTheme.NoActionBar",
-        Icon = "@drawable/icon",
+        Icon = "@drawable/icon", 
+        WindowSoftInputMode = SoftInput.AdjustResize,
         MainLauncher = true,
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize | ConfigChanges.UiMode)]
     public class MainActivity : AvaloniaMainActivity<App>
