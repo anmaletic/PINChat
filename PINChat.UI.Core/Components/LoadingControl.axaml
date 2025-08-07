@@ -8,9 +8,7 @@
              d:DesignHeight="450"
              d:DesignWidth="800"
              mc:Ignorable="d">
-  <Grid Height="80"
-        HorizontalAlignment="Center" VerticalAlignment="Center"
-        ColumnSpan="2" RowDefinitions="Auto, Auto">
+  <Grid HorizontalAlignment="Center" VerticalAlignment="Center" RowDefinitions="Auto, Auto">
     <deadpikle:ProgressRing Grid.Row="0"
                             Width="60" Height="60"
                             Margin="10,20,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"

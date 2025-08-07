@@ -1,8 +1,8 @@
 ﻿<UserControl x:Class="PINChat.UI.Views.SignInView"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:components="clr-namespace:PINChat.UI.Core.Components;assembly=PINChat.UI.Core"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:deadpikle="clr-namespace:AvaloniaProgressRing;assembly=AvaloniaProgressRing"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:PINChat.UI.ViewModels"
              d:DesignHeight="800"
@@ -69,21 +69,10 @@
                  FontFamily="{StaticResource PoppinsBold}"
                  FontSize="18"
                  Foreground="{DynamicResource FontColor3}"
+                 IsVisible="{Binding Message, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                  Text="{Binding Message}" />
 
-      <Grid Height="80" ColumnSpan="2" RowDefinitions="Auto, Auto">
-        <deadpikle:ProgressRing Grid.Row="0"
-                                Width="60" Height="60"
-                                Margin="10,20,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                Foreground="{DynamicResource FontColor2}"
-                                IsActive="{Binding IsLoading}" />
-        <Label Grid.Row="1"
-               HorizontalAlignment="Center" VerticalAlignment="Center"
-               Content="Loading..."
-               FontFamily="{StaticResource PoppinsBold}"
-               Foreground="{DynamicResource FontColor2}"
-               IsVisible="{Binding IsLoading}" />
-      </Grid>
+      <components:LoadingControl IsLoading="{Binding IsLoading}" />
 
     </StackPanel>
   </Grid>
