@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="PINChat.UI.Core.Components.LoadingControl"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:deadpikle="clr-namespace:AvaloniaProgressRing;assembly=AvaloniaProgressRing"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             x:Name="Root"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             mc:Ignorable="d">
+  <Grid Height="80"
+        HorizontalAlignment="Center" VerticalAlignment="Center"
+        ColumnSpan="2" RowDefinitions="Auto, Auto">
+    <deadpikle:ProgressRing Grid.Row="0"
+                            Width="60" Height="60"
+                            Margin="10,20,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Foreground="{DynamicResource FontColor2}"
+                            IsActive="{Binding ElementName=Root, Path=IsLoading}" />
+    <Label Grid.Row="1"
+           HorizontalAlignment="Center" VerticalAlignment="Center"
+           Content="Loading..."
+           FontFamily="{StaticResource PoppinsBold}"
+           Foreground="{DynamicResource FontColor2}"
+           IsVisible="{Binding ElementName=Root, Path=IsLoading}" />
+  </Grid>
+</UserControl>
