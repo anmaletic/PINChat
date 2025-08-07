@@ -26,7 +26,7 @@ public partial class ChatService : ObservableObject, IChatService
 
         // Initialize HubConnection
         _hubConnection = new HubConnectionBuilder()
-            .WithUrl("https://localhost:7152/chathub", options =>
+            .WithUrl("https://pinchat-v2-chat-server.anmal.dev/chathub", options =>
             {
                 options.AccessTokenProvider = () => Task.FromResult(_loggedInUserService.UserToken);
             })
