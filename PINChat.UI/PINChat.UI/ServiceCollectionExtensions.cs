@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using PINChat.UI.Core.Models;
 using PINChat.UI.Core.Validators;
+using PINChat.UI.Views.Mobile;
 
 namespace PINChat.UI;
 
@@ -25,8 +26,13 @@ public static class ServiceCollectionExtensions
         services.AddViewManagerBase(builder =>
         {
             builder.RegisterView<LoginView, LoginViewModel>();
-            builder.RegisterView<SignInView, SignInViewModel>();
-            builder.RegisterView<SignUpView, SignUpViewModel>();
+            
+            builder.RegisterView<SignInView, SignInViewModel>("SignInView");
+            builder.RegisterView<SignUpView, SignUpViewModel>("SignUpView");
+            
+            builder.RegisterView<SignInMobileView, SignInViewModel>("SignInMobileView");
+            builder.RegisterView<SignUpMobileView, SignUpViewModel>("SignUpMobileView");
+            
             builder.RegisterView<ChatView, ChatViewModel>();
         });
 
