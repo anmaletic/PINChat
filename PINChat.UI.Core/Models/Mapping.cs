@@ -36,6 +36,7 @@ public static class Mapping
             Id = message.Id,
             Timestamp = message.Timestamp,
             Sender = message.SenderId,
+            SenderId = message.SenderId,
             Content = message.Content,
             MessageType = message.MessageType,
             ImagePath = message.ImagePath,

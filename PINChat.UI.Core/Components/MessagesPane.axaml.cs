@@ -57,7 +57,8 @@ public partial class MessagesPane : UserControl
     
     private void OnMessagesCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        if (e.Action == NotifyCollectionChangedAction.Add)
+        if (e.Action == NotifyCollectionChangedAction.Add ||
+            e.Action == NotifyCollectionChangedAction.Reset)
         {
             // Ensure scrolling happens on the UI thread with a small delay for layout
             Dispatcher.UIThread.InvokeAsync(async () =>

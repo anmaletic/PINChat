@@ -2,6 +2,7 @@
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using PINChat.UI.Core.Common;
+using PINChat.UI.Core.Extensions;
 
 namespace PINChat.UI.Core.Models;
 
@@ -19,7 +20,7 @@ public partial class UserModel : ObservableObject
     private bool _isTyping;
     
     public ObservableCollection<UserModel> Contacts { get; set; } = [];
-    public ObservableCollection<ChatMessageModel> Messages { get; set; } = [];
+    public SmartObservableCollection<ChatMessageModel> Messages { get; set; } = [];
 
     public Bitmap? AvatarBitmap
     {

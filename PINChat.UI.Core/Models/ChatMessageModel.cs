@@ -11,6 +11,7 @@ public partial class ChatMessageModel : ObservableObject
     public string Id { get; set; }
     public DateTime Timestamp { get; set; } = DateTime.Now;
     public string Sender { get; set; } = "";
+    public string SenderId { get; set; } = "";
     
     [ObservableProperty]
     private string _content = "";
