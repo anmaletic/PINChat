@@ -38,6 +38,7 @@ public partial class ChatMessageModel : ObservableObject
     {
         if (value == MessageType.Image)
         {
+            Image = ImageHelper.LoadFromResource(new Uri("avares://PINChat.UI.Core/Assets/Images/msg-placeholder.png"));
             IsLoading = true;
             ImagePath = null; // Reset image path to trigger loading
         }
@@ -59,7 +60,7 @@ public partial class ChatMessageModel : ObservableObject
     }
 
     [ObservableProperty]
-    private Bitmap? _image = ImageHelper.LoadFromResource(new Uri("avares://PINChat.UI.Core/Assets/Images/msg-placeholder.png"));
+    private Bitmap? _image;
 
     public bool IsOrigin { get; set; } 
 }

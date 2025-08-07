@@ -1,10 +1,13 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Platform.Storage;
 using Avalonia.Styling;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
@@ -36,10 +39,13 @@ public partial class ChatViewModel : ViewModelBase
     private UserModel _user = new();
 
     [ObservableProperty]
-    private UserModel _selectedContact = new();
+    private UserModel? _selectedContact;
 
     [ObservableProperty]
     private string _newMsgContent = "";
+
+    [ObservableProperty]
+    private bool _isLoadingMessages;
 
     [ObservableProperty]
     private bool _isMobileMessagesPaneVisible;
@@ -74,7 +80,7 @@ public partial class ChatViewModel : ViewModelBase
     {
         var backendMessage = e.Message;
 
-        var existingMsg = SelectedContact.Messages.FirstOrDefault(m => m.Id == backendMessage.TempId);
+        var existingMsg = SelectedContact!.Messages.FirstOrDefault(m => m.Id == backendMessage.TempId);
 
         if (existingMsg != null && existingMsg.IsOrigin)
         {
@@ -100,7 +106,7 @@ public partial class ChatViewModel : ViewModelBase
 
     private void OnMessageStatusUpdated(object? sender, MessageStatusUpdatedEventArgs e)
     {
-        var msgToUpdate = SelectedContact.Messages.FirstOrDefault(m => m.Id == e.MessageId);
+        var msgToUpdate = SelectedContact!.Messages.FirstOrDefault(m => m.Id == e.MessageId);
         if (msgToUpdate == null)
         {
             return;
@@ -133,7 +139,7 @@ public partial class ChatViewModel : ViewModelBase
         });
     }
 
-    partial void OnSelectedContactChanged(UserModel value)
+    partial void OnSelectedContactChanged(UserModel? value)
     {
         if (value is null)
         {
@@ -159,7 +165,9 @@ public partial class ChatViewModel : ViewModelBase
                 return;
             }
 
-            SelectedContact.Messages.Clear();
+            SelectedContact!.Messages.Clear();
+
+            IsLoadingMessages = true;
 
             var historyResponse = await _chatApi.GetChatHistory(
                 SelectedContact.UserId,
@@ -189,6 +197,10 @@ public partial class ChatViewModel : ViewModelBase
         {
             Console.WriteLine($"General Error loading chat history: {ex.Message}");
         }
+        finally
+        {
+            IsLoadingMessages = false;
+        }
     }
 
     private async Task SendTypingStatusUpdate()
@@ -204,13 +216,13 @@ public partial class ChatViewModel : ViewModelBase
 
         if (!string.IsNullOrWhiteSpace(NewMsgContent))
         {
-            await _chatService.SendTypingStatusAsync(SelectedContact.UserId!, true);
+            await _chatService.SendTypingStatusAsync(SelectedContact.UserId, true);
         }
 
         try
         {
             await Task.Delay(TypingTimeoutMs, token);
-            await _chatService.SendTypingStatusAsync(SelectedContact.UserId!, false);
+            await _chatService.SendTypingStatusAsync(SelectedContact.UserId, false);
         }
         catch (TaskCanceledException)
         {
@@ -292,7 +304,7 @@ public partial class ChatViewModel : ViewModelBase
             return;
         }
 
-        var file = await _dialogService.ShowFilePicker();
+        var file = await _dialogService.ShowFilePicker("Odabir slike", FilePickerFileTypes.ImageAll);
 
         if (file is not null)
         {
@@ -360,6 +372,47 @@ public partial class ChatViewModel : ViewModelBase
 
         StrongReferenceMessenger.Default.UnregisterAll(this);
         StrongReferenceMessenger.Default.Send(new ChangeViewMessage(nameof(LoginViewModel)));
+    }
+
+    [RelayCommand]
+    private async Task ExportMessages()
+    {
+        if (SelectedContact == null || SelectedContact.Messages.Count == 0)
+        {
+            Console.WriteLine("No messages to export or no contact selected.");
+            return;
+        }
+        
+        var file = await _dialogService.ShowSaveFilePicker(
+            "Save Chat History",
+            $"ChatHistory_{SelectedContact.UserName}",
+            "json",
+            "application/json"
+        );
+        
+        if (file == null)
+        {
+            Console.WriteLine("Save operation cancelled by user.");
+            return;
+        }
+
+        try
+        {
+            // Serialize the messages collection to a JSON string
+            var jsonOptions = new JsonSerializerOptions { WriteIndented = true };
+            var jsonString = JsonSerializer.Serialize(SelectedContact.Messages, jsonOptions);
+
+            // Write the JSON string to the selected file
+            await using var stream = await file.OpenWriteAsync();
+            await using var writer = new StreamWriter(stream);
+            await writer.WriteAsync(jsonString);
+
+            Console.WriteLine($"Messages successfully exported to {file.Path.LocalPath}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error exporting messages to JSON: {ex.Message}");
+        }
     }
 
     private void OnBackPressedMessageReceived(object recipient, OnBackPressedMessage message)

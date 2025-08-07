@@ -89,15 +89,36 @@
           <Border Margin="20,20,20,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                   Background="{DynamicResource Color2}"
                   CornerRadius="15">
-            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
-                       FontFamily="{DynamicResource PoppinsRegular}"
-                       FontSize="16" FontWeight="Bold"
-                       Foreground="{DynamicResource FontColor1}"
-                       Text="{Binding SelectedContact.UserName}" />
+
+            <Grid ColumnDefinitions="*,*,*" IsVisible="{Binding SelectedContact, Converter={x:Static ObjectConverters.IsNotNull}}">
+
+              <TextBlock Grid.Column="1"
+                         HorizontalAlignment="Center" VerticalAlignment="Center"
+                         FontFamily="{DynamicResource PoppinsRegular}"
+                         FontSize="16" FontWeight="Bold"
+                         Foreground="{DynamicResource FontColor1}"
+                         Text="{Binding SelectedContact.UserName}" />
+
+              <StackPanel Grid.Column="2" Margin="0,0,10,0" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <Button Width="35" Height="35"
+                        VerticalAlignment="Center"
+                        Background="{DynamicResource Color2}"
+                        BorderThickness="0"
+                        Command="{Binding ExportMessagesCommand}"
+                        CornerRadius="10">
+                  <fa:Icon FontSize="20" Foreground="{DynamicResource FontColor1}" Value="fa-solid fa-file-export" />
+                </Button>
+              </StackPanel>
+            </Grid>
+
           </Border>
         </Grid>
 
         <components:MessagesPane Grid.Row="1" Margin="10,0" Messages="{Binding SelectedContact.Messages}" />
+
+        <Grid Grid.Row="1" Margin="10,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+          <components:LoadingControl IsLoading="{Binding IsLoadingMessages}" />
+        </Grid>
 
         <Grid Grid.Row="2" Margin="20,10" ColumnDefinitions="*, Auto, Auto">
           <TextBox Grid.Column="0"
