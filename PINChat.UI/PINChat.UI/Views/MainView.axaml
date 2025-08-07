@@ -12,5 +12,12 @@
     <vm:MainViewModel />
   </Design.DataContext>
 
-  <ContentControl Content="{Binding CurrentView}" />
+  <TransitioningContentControl Content="{Binding CurrentView}">
+    <TransitioningContentControl.PageTransition>
+      <CompositePageTransition>
+        <PageSlide Orientation="Vertical" Duration="0.2" />
+        <CrossFade Duration="0.2" />
+      </CompositePageTransition>
+    </TransitioningContentControl.PageTransition>
+  </TransitioningContentControl>
 </UserControl>
