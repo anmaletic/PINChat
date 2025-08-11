@@ -2,5 +2,5 @@
 
 public interface IParameterized
 {
-    Task OnParametersSet(Dictionary<string, object> parameters);
+    void OnParametersSet(Dictionary<string, object> parameters);
 }
