@@ -12,8 +12,8 @@ namespace PINChat.UI.Android
         Label = "PINChat.UI.Android",
         Theme = "@style/MyTheme.NoActionBar",
         Icon = "@drawable/icon", 
-        WindowSoftInputMode = SoftInput.AdjustResize,
         MainLauncher = true,
+        ScreenOrientation = ScreenOrientation.Portrait,
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize | ConfigChanges.UiMode)]
     public class MainActivity : AvaloniaMainActivity<App>
     {
