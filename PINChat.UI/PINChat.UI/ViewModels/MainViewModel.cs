@@ -6,7 +6,7 @@ using PINChat.UI.ViewManager.Interfaces;
 
 namespace PINChat.UI.ViewModels;
 
-public partial class MainViewModel : ViewModelBase
+public partial class MainViewModel : MainViewModelBase
 {
 
     private readonly IViewManager _viewManager;
