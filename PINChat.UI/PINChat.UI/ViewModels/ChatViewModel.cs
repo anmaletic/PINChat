@@ -32,7 +32,7 @@ public partial class ChatViewModel : ViewModelBase
     private readonly ILoggedInUserService _loggedInUserService;
     private readonly IChatService _chatService;
     private readonly IChatApi _chatApi;
-    private readonly DialogService _dialogService;
+    private readonly IDialogService _dialogService;
     private readonly IMinioFrontendService _minioService;
 
     [ObservableProperty]
@@ -55,7 +55,7 @@ public partial class ChatViewModel : ViewModelBase
     }
 
     public ChatViewModel(ILoggedInUserService loggedInUserService, IChatService chatService, IChatApi chatApi,
-        DialogService dialogService, IMinioFrontendService minioService)
+        IDialogService dialogService, IMinioFrontendService minioService)
     {
         StrongReferenceMessenger.Default.Register<OnBackPressedMessage>(this, OnBackPressedMessageReceived);
 
