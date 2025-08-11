@@ -1,0 +1,111 @@
+@using PINChat.UI.Core.Models
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Report</title>
+    <style>
+        body {
+            font-family: Consolas, monospace;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+        }
+
+        .error-container {
+            background-color: #252526;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid red;
+        }
+
+        .error-header {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ff5555;
+            margin-bottom: 10px;
+        }
+
+        .error-info {
+            color: #c5c5c5;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        .error-message {
+            color: #ffcc99;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .error-message-content {
+            color: #9cdcfe;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .stack-trace {
+            margin-top: 10px;
+            white-space: pre-wrap;
+            color: #9cdcfe;
+            font-size: 14px;
+            background-color: #1e1e1e;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+
+        .stack-trace span.method {
+            color: #dcdcaa;
+        }
+
+        .stack-trace span.file {
+            color: #ce9178;
+        }
+
+        .stack-trace span.line {
+            color: #4ec9b0;
+        }
+    </style>
+</head>
+<body>
+<div class="error-container">
+    <div class="error-header">Error Report</div>
+    <div class="error-info"><strong>User:</strong> @Model.Username</div>
+    <div class="error-info"><strong>Hostname:</strong> @Model.Hostname</div>
+    <div class="error-info"><strong>Time:</strong> @Model.Date EST</div>
+    <div class="error-message"><strong>Message:</strong> @Model.Message</div>
+    <div class="error-message"><strong>Exception:</strong> @Model.ErrorMessage.GetType().Name</div>
+    <div class="error-message"><strong>ExceptionMessage:</strong>
+        <br/>
+        <div class="error-message-content">
+            @(new MarkupString(Model.ErrorMessage.Message.Replace(Environment.NewLine, "<br/>")))
+        </div>
+    </div>
+
+    @if (Model.ErrorMessage.StackTrace != null)
+    {
+        <div class="stack-trace">
+            @foreach (var line in Model.ErrorMessage.StackTrace.Split('\n'))
+            {
+                <div>@(FormatStackTraceLine(line))</div>
+            }
+        </div>
+    }
+</div>
+</body>
+</html>
+
+@code {
+    [Parameter] public ErrorMessageModel Model { get; set; } = new();
+
+    private MarkupString FormatStackTraceLine(string line)
+    {
+        return new MarkupString(line
+            .Replace(" at ", "<span class='method'> at </span>")
+            .Replace(" in ", " <span class='file'>in </span>")
+            .Replace(":line", " <span class='line'>:line</span>"));
+    }
+}
