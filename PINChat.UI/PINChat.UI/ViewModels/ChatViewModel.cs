@@ -26,6 +26,8 @@ namespace PINChat.UI.ViewModels;
 
 public partial class ChatViewModel : ViewModelBase
 {
+    private CancellationTokenSource? _cancellationTokenSource = new();
+    
     private CancellationTokenSource? _typingCancellationTokenSource;
     private const int TypingTimeoutMs = 1500;
 
@@ -145,8 +147,11 @@ public partial class ChatViewModel : ViewModelBase
         {
             return;
         }
+        
+        _cancellationTokenSource?.Cancel();
+        _cancellationTokenSource = new CancellationTokenSource();
 
-        _ = LoadChatHistoryForSelectedContact();
+        _ = LoadChatHistoryForSelectedContact(_cancellationTokenSource.Token);
         IsMobileMessagesPaneVisible = true;
     }
 
@@ -155,7 +160,7 @@ public partial class ChatViewModel : ViewModelBase
         _ = SendTypingStatusUpdate();
     }
 
-    private async Task LoadChatHistoryForSelectedContact()
+    private async Task LoadChatHistoryForSelectedContact(CancellationToken cancellationToken)
     {
         try
         {
@@ -164,6 +169,8 @@ public partial class ChatViewModel : ViewModelBase
                 Console.WriteLine("No authentication token available to fetch chat history.");
                 return;
             }
+            
+            cancellationToken.ThrowIfCancellationRequested();
 
             SelectedContact!.Messages.Clear();
 
@@ -171,11 +178,14 @@ public partial class ChatViewModel : ViewModelBase
 
             var historyResponse = await _chatApi.GetChatHistory(
                 SelectedContact.UserId,
-                $"Bearer {User.Token}"
+                $"Bearer {User.Token}",
+                cancellationToken
             );
 
             if (historyResponse.IsSuccessStatusCode && historyResponse.Content != null)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+                
                 Dispatcher.UIThread.InvokeAsync(() =>
                 {
                     var msgs = historyResponse.Content.Messages.ToModels().ToList();
@@ -188,6 +198,10 @@ public partial class ChatViewModel : ViewModelBase
             {
                 Console.WriteLine($"Failed to load chat history: {historyResponse.Error?.Content}");
             }
+        }
+        catch (OperationCanceledException)
+        {
+            Console.WriteLine("Chat history loading was canceled.");
         }
         catch (ApiException ex)
         {
