@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using PINChat.Api.Handlers;
 using PINChat.Core.Application;
 using PINChat.Core.Options;
 using PINChat.Persistence.Db.Services;
@@ -8,6 +9,15 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails(config =>
+{
+    config.CustomizeProblemDetails = options =>
+    {
+        options.ProblemDetails.Extensions.TryAdd("requestId", options.HttpContext.TraceIdentifier);
+    };
+});
 
 builder.Services.AddCors();
 
@@ -67,10 +77,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors(builder => builder
+app.UseCors(policyBuilder => policyBuilder
     .AllowAnyMethod()
     .AllowAnyHeader()
     .AllowAnyOrigin());
+
+app.UseExceptionHandler();
 
 app.UseAuthentication();
 app.UseAuthorization();
