@@ -9,6 +9,8 @@ using Avalonia.Markup.Xaml;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Messaging;
 using PINChat.Api.Sdk;
+using PINChat.UI.Core.Handlers;
+using PINChat.UI.Core.Helpers;
 using PINChat.UI.Core.Interfaces;
 using PINChat.UI.Core.Messages;
 using PINChat.UI.Core.Services;
@@ -33,6 +35,8 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        Ioc.Default.GetRequiredService<GlobalErrorHandler>().AddHandlers();
+        
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
@@ -81,9 +85,9 @@ public partial class App : Application
     private void ConfigureServices()
     {
         Ioc.Default.ConfigureServices(new ServiceCollection()
-            // .AddSingleton<GlobalErrorHandler>()
+            .AddSingleton<GlobalErrorHandler>()
             .AddSingleton<MainWindow>()
-            .AddSingleton<DialogService>()
+            .AddSingleton<IDialogService, DialogService>()
             .AddSingleton<Func<TopLevel?>>(x=> () =>
             {
                 return ApplicationLifetime switch
@@ -94,11 +98,13 @@ public partial class App : Application
                 };
             })
             .AddViewModels()
+            .AddValidators()
             .AddViewManager()
             .AddApiSdk()
             .AddSingleton<IChatService, ChatService>()
             .AddSingleton<IMinioFrontendService, MinioFrontendService>()
             .AddSingleton<ILoggedInUserService, LoggedInUserService>()
+            .AddSingleton<ErrorMessageHelper>()
             .BuildServiceProvider());
     }
 }
