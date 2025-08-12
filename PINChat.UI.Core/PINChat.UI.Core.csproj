@@ -20,6 +20,9 @@
         <PackageReference Include="Deadpikle.AvaloniaProgressRing" />
         <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" />
         <PackageReference Include="Refit" />
+        <PackageReference Include="Xaml.Behaviors.Avalonia" />
+        <PackageReference Include="Xaml.Behaviors.Interactions" />
+        <PackageReference Include="Xaml.Behaviors.Interactivity" />
     </ItemGroup>
     
     <ItemGroup>

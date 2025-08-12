@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:components="clr-namespace:PINChat.UI.Core.Components;assembly=PINChat.UI.Core"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:fa="https://github.com/projektanker/icons.avalonia"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:PINChat.UI.ViewModels"
              d:DesignHeight="800"
@@ -34,46 +33,16 @@
 
         <components:MessagesPane Grid.Row="1" Margin="10,0" Messages="{Binding SelectedContact.Messages}" />
 
-        <Grid Grid.Row="1" Margin="10,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-          <components:LoadingControl IsLoading="{Binding IsLoadingMessages}" />
-        </Grid>
+        <components:LoadingControl Grid.Row="1"
+                                   Margin="10,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                   IsLoading="{Binding IsLoadingMessages}" />
 
-        <Grid Grid.Row="2" Margin="20,10" ColumnDefinitions="*, Auto, Auto">
-          <TextBox Grid.Column="0"
-                   MinHeight="40" MaxHeight="120"
-                   Margin="0,0,10,0" VerticalContentAlignment="Top"
-                   Background="{DynamicResource Color1}"
-                   BorderThickness="0" CornerRadius="8"
-                   Foreground="{DynamicResource FontColor2}"
-                   Text="{Binding NewMsgContent}"
-                   TextWrapping="Wrap" Watermark="Type your message...">
-            <Interaction.Behaviors>
-              <EventTriggerBehavior EventName="KeyDown">
-                <InvokeCommandAction Command="{Binding HandleKeyDownCommand}" PassEventArgsToCommand="True" />
-              </EventTriggerBehavior>
-            </Interaction.Behaviors>
-          </TextBox>
-
-          <Button Grid.Column="1"
-                  Height="39"
-                  Padding="15,0" VerticalContentAlignment="Center"
-                  Background="{DynamicResource Color2}"
-                  BorderThickness="0"
-                  Command="{Binding SelectAndSendImageCommand}"
-                  CornerRadius="8"
-                  Foreground="{DynamicResource FontColor1}">
-            <fa:Icon Value="fa-solid fa-image" />
-          </Button>
-
-          <Button Grid.Column="2"
-                  Height="39"
-                  Margin="10,0,0,0" Padding="15,0" VerticalContentAlignment="Center"
-                  Background="{DynamicResource Color2}"
-                  BorderThickness="0"
-                  Command="{Binding SendMessageCommand}"
-                  Content="Send" CornerRadius="8"
-                  Foreground="{DynamicResource FontColor1}" />
-        </Grid>
+        <components:NewMessageInput Grid.Row="2"
+                                    Margin="20,10"
+                                    HandleKeyDownCommand="{Binding HandleKeyDownCommand}"
+                                    MessageContent="{Binding NewMsgContent}"
+                                    SelectAndSendImageCommand="{Binding SelectAndSendImageCommand}"
+                                    SendMessageCommand="{Binding SendMessageCommand}" />
       </Grid>
     </Grid>
   </Grid>

@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="PINChat.UI.Core.Components.NewMessageInput"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:fa="https://github.com/projektanker/icons.avalonia"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             x:Name="Root"
+             d:DesignHeight="60"
+             d:DesignWidth="800"
+             mc:Ignorable="d">
+  <Grid ColumnDefinitions="*, Auto, Auto">
+    <TextBox Grid.Column="0"
+             MinHeight="40" MaxHeight="120"
+             Margin="0,0,10,0" VerticalContentAlignment="Top"
+             Background="{DynamicResource Color1}"
+             BorderThickness="0" CornerRadius="8"
+             Foreground="{DynamicResource FontColor2}"
+             Text="{Binding ElementName=Root, Path=MessageContent, Mode=TwoWay}"
+             TextWrapping="Wrap" Watermark="Type your message...">
+      <Interaction.Behaviors>
+        <EventTriggerBehavior EventName="KeyDown">
+          <InvokeCommandAction Command="{Binding ElementName=Root, Path=HandleKeyDownCommand}" PassEventArgsToCommand="True" />
+        </EventTriggerBehavior>
+      </Interaction.Behaviors>
+    </TextBox>
+
+    <Button Grid.Column="1"
+            Height="39"
+            Padding="15,0" VerticalContentAlignment="Center"
+            Background="{DynamicResource Color2}"
+            BorderThickness="0"
+            Command="{Binding ElementName=Root, Path=SelectAndSendImageCommand}"
+            CornerRadius="8"
+            Foreground="{DynamicResource FontColor1}">
+      <fa:Icon Value="fa-solid fa-image" />
+    </Button>
+
+    <Button Grid.Column="2"
+            Height="39"
+            Margin="10,0,0,0" Padding="15,0" VerticalContentAlignment="Center"
+            Background="{DynamicResource Color2}"
+            BorderThickness="0"
+            Command="{Binding ElementName=Root, Path=SendMessageCommand}"
+            Content="Send" CornerRadius="8"
+            Foreground="{DynamicResource FontColor1}" />
+  </Grid>
+</UserControl>
