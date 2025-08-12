@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="PINChat.UI.Core.Components.DockMenu"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:enums="clr-namespace:PINChat.Core.Domain.Enums;assembly=PINChat.Core"
+             xmlns:fa="https://github.com/projektanker/icons.avalonia"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             x:Name="Root"
+             d:DesignHeight="800"
+             d:DesignWidth="60"
+             mc:Ignorable="d">
+
+  <Grid Background="{DynamicResource ColorBrush3}">
+    <Grid.Styles>
+      <Style Selector="Button">
+        <Setter Property="Width" Value="40" />
+        <Setter Property="Height" Value="40" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="CornerRadius" Value="15" />
+        <Setter Property="Background" Value="{DynamicResource ColorBrush1}" />
+        <Setter Property="Command" Value="{Binding ElementName=Root, Path=SelectedItemCommand}" />
+      </Style>
+
+      <Style Selector="fa|Icon">
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="Foreground" Value="{DynamicResource ColorBrush4}" />
+      </Style>
+    </Grid.Styles>
+
+    <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top">
+      <StackPanel.Styles>
+        <Style Selector="Button">
+          <Setter Property="Margin" Value="0,10,0,0" />
+        </Style>
+      </StackPanel.Styles>
+
+      <Button CommandParameter="{x:Static enums:DockButton.Chat}">
+        <fa:Icon Value="fa-solid fa-message" />
+      </Button>
+      <Button CommandParameter="{x:Static enums:DockButton.Contacts}">
+        <fa:Icon Value="fa-solid fa-address-book" />
+      </Button>
+      <Button CommandParameter="{x:Static enums:DockButton.Groups}">
+        <fa:Icon Value="fa-solid fa-people-group" />
+      </Button>
+    </StackPanel>
+
+    <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
+      <StackPanel.Styles>
+        <Style Selector="Button">
+          <Setter Property="Margin" Value="0,0,0,10" />
+        </Style>
+      </StackPanel.Styles>
+
+      <Button CommandParameter="{x:Static enums:DockButton.Theme}">
+        <fa:Icon Value="fa-solid fa-circle-half-stroke" />
+      </Button>
+
+      <Button CommandParameter="{x:Static enums:DockButton.Settings}">
+        <fa:Icon Value="fa-solid fa-gear" />
+      </Button>
+      <Button CommandParameter="{x:Static enums:DockButton.Profile}">
+        <Image Width="30" Height="30" Source="{Binding ElementName=Root, Path=Avatar}" />
+      </Button>
+      <Button CommandParameter="{x:Static enums:DockButton.Logout}">
+        <fa:Icon Value="fa-solid fa-arrow-right-from-bracket" />
+      </Button>
+    </StackPanel>
+  </Grid>
+</UserControl>

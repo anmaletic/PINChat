@@ -439,4 +439,10 @@ public partial class ChatViewModel : ViewModelBase
         IsMobileMessagesPaneVisible = false;
         SelectedContact = null!;
     }
+
+    [RelayCommand]
+    private void HandleSelectedDockItem(DockButton btn)
+    {
+        
+    }
 }
