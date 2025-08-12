@@ -14,36 +14,19 @@
     <vm:ChatViewModel />
   </Design.DataContext>
 
-  <Grid ColumnDefinitions="60, 350, *">
+  <Grid ColumnDefinitions="60, *">
 
     <Grid Grid.Column="0">
-      <components:DockMenu Avatar="{Binding User.AvatarBitmap}" SelectedItemCommand="{Binding HandleSelectedDockItemCommand}" />
+      <components:DockMenu Avatar="{Binding LoggedInUser.AvatarBitmap}" SelectedItemCommand="{Binding HandleSelectedDockItemCommand}" />
     </Grid>
 
-    <Grid Grid.Column="1">
-      <components:ContactsPane Margin="10" Contacts="{Binding User.Contacts}" SelectedContact="{Binding SelectedContact, Mode=TwoWay}" />
+    <TransitioningContentControl Grid.Column="1" Content="{Binding CurrentView}">
+      <TransitioningContentControl.PageTransition>
+        <CompositePageTransition>
+          <CrossFade Duration="0.2" />
+        </CompositePageTransition>
+      </TransitioningContentControl.PageTransition>
+    </TransitioningContentControl>
 
-      <Border Width="1" HorizontalAlignment="Right" BorderBrush="#666666" BorderThickness="1" />
-    </Grid>
-
-    <Grid Grid.Column="2">
-      <Grid RowDefinitions="60, *, Auto">
-
-        <components:SelectedContactHeader Grid.Row="0" Margin="20,20,20,0" ExportMessagesCommand="{Binding ExportMessagesCommand}" SelectedContact="{Binding SelectedContact}" />
-
-        <components:MessagesPane Grid.Row="1" Margin="10,0" Messages="{Binding SelectedContact.Messages}" />
-
-        <components:LoadingControl Grid.Row="1"
-                                   Margin="10,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                                   IsLoading="{Binding IsLoadingMessages}" />
-
-        <components:NewMessageInput Grid.Row="2"
-                                    Margin="20,10"
-                                    HandleKeyDownCommand="{Binding HandleKeyDownCommand}"
-                                    MessageContent="{Binding NewMsgContent}"
-                                    SelectAndSendImageCommand="{Binding SelectAndSendImageCommand}"
-                                    SendMessageCommand="{Binding SendMessageCommand}" />
-      </Grid>
-    </Grid>
   </Grid>
 </UserControl>

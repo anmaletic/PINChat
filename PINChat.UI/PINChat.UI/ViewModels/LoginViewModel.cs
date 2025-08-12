@@ -19,21 +19,11 @@ public partial class LoginViewModel : LoadableViewModelBase
     
     public LoginViewModel(IViewManager viewManager)
     {
-   
         _viewManager = viewManager;
         
         StrongReferenceMessenger.Default.Register<ChangeLoginViewMessage>(this, OnChangeViewMessageReceived);
-        StrongReferenceMessenger.Default.Register<IsViewDeactivatedMessage>(this, OnDeactivatedMessageReceived);
 
         InitializeDefaultView();
-    }
-    
-    private void OnDeactivatedMessageReceived(object recipient, IsViewDeactivatedMessage message)
-    {
-        if (message.IsDeactivated)
-        {
-            StrongReferenceMessenger.Default.UnregisterAll(this);
-        }
     }
 
     private void InitializeDefaultView()

@@ -2,11 +2,11 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace PINChat.UI.Views.Mobile;
+namespace PINChat.UI.Views;
 
-public partial class ChatMobileView : UserControl
+public partial class MessagingView : UserControl
 {
-    public ChatMobileView()
+    public MessagingView()
     {
         InitializeComponent();
     }
