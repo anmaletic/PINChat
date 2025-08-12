@@ -1,0 +1,45 @@
+﻿FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+
+# Install python
+RUN apt-get update && \
+    apt-get install -y python3 && \
+    rm -rf /var/lib/apt/lists/*
+ENV PATH="/usr/bin/python3:${PATH}"
+
+# Copy project files for restore
+COPY ["PINChat.UI/PINChat.UI.Browser/PINChat.UI.Browser.csproj", "PINChat.UI/PINChat.UI.Browser/"]
+
+# Install WebAssembly tools and restore dependencies
+RUN dotnet workload install wasm-tools
+RUN dotnet restore "./PINChat.UI/PINChat.UI.Browser/PINChat.UI.Browser.csproj"
+
+# Copy all source code
+COPY . .
+WORKDIR "/src/PINChat.UI/PINChat.UI.Browser"
+
+# Build the application
+RUN dotnet build "./PINChat.UI.Browser.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN ls -la /app/build
+
+# Publish stage
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./PINChat.UI.Browser.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN ls -la /app/publish
+
+# Stage 2: Serve with Nginx
+FROM nginx:alpine AS runtime
+
+# Remove default nginx website
+RUN rm -rf /usr/share/nginx/html/*
+
+# Copy the published app to nginx html directory
+COPY --from=publish /app/publish/wwwroot /usr/share/nginx/html
+
+# Expose port 80
+EXPOSE 80
+
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]

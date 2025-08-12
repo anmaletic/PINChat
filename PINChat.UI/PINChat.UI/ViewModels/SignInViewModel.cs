@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -56,6 +57,10 @@ public partial class SignInViewModel : LoginViewModelBase
             return;
         }
 
+        Console.WriteLine("Login successful");
+        Console.WriteLine($"Login response: {loginResult?.ToString() ?? "NULL"}");
+        Console.WriteLine("Data: " + loginResult.Content);
+        
         var loggedInUserData = loginResult.Content!;
 
         _loggedInUserService.SetUser(loggedInUserData.ToModel(), loggedInUserData.UserId, loggedInUserData.Token!);
