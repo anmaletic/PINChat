@@ -68,9 +68,15 @@ public class DialogService(Func<TopLevel?> topLevel, IViewManager viewManager, E
         };
         
         var tcs = new TaskCompletionSource<bool>();
+        var isCompleted = false;
         
         Action onDialogClosed = () => 
         {
+            if (isCompleted)
+            {
+                return;
+            }
+            
             var overlay = mainGrid.Children.OfType<Border>()
                 .FirstOrDefault(c => c.Name == "ErrorDialogOverlay");
             if (overlay != null)
