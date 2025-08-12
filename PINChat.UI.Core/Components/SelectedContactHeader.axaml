@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="PINChat.UI.Core.Components.SelectedContactHeader"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:fa="https://github.com/projektanker/icons.avalonia"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             x:Name="Root"
+             d:DesignHeight="60"
+             d:DesignWidth="800"
+             mc:Ignorable="d">
+  <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{DynamicResource Color2}" CornerRadius="15">
+
+    <Grid ColumnDefinitions="*,*,*" IsVisible="{Binding ElementName=Root, Path=SelectedContact, Converter={x:Static ObjectConverters.IsNotNull}}">
+
+      <TextBlock Grid.Column="1"
+                 HorizontalAlignment="Center" VerticalAlignment="Center"
+                 FontFamily="{DynamicResource PoppinsRegular}"
+                 FontSize="16" FontWeight="Bold"
+                 Foreground="{DynamicResource FontColor1}"
+                 Text="{Binding ElementName=Root, Path=SelectedContact.UserName}" />
+
+      <StackPanel Grid.Column="2" Margin="0,0,10,0" HorizontalAlignment="Right" VerticalAlignment="Center">
+        <Button Width="35" Height="35"
+                VerticalAlignment="Center"
+                Background="{DynamicResource Color2}"
+                BorderThickness="0"
+                Command="{Binding ElementName=Root, Path=ExportMessagesCommand}"
+                CornerRadius="10">
+          <fa:Icon FontSize="20" Foreground="{DynamicResource FontColor1}" Value="fa-solid fa-file-export" />
+        </Button>
+      </StackPanel>
+    </Grid>
+
+  </Border>
+</UserControl>
