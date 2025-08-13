@@ -22,7 +22,31 @@
            FontFamily="{DynamicResource PoetsenOneFont}"
            Foreground="{DynamicResource FontColor1}" />
 
-    <HtmlPanel Grid.Row="1" Padding="0" Background="#1e1e1e" Text="{Binding Message}" />
+
+    <ListBox Grid.Row="1" Background="#1e1e1e" ItemsSource="{Binding Errors}">
+      <ListBox.Styles>
+        <Style Selector="ListBoxItem">
+          <Setter Property="Focusable" Value="False" />
+          <Setter Property="Padding" Value="2" />
+          <!--  Remove default padding from ListBoxItem  -->
+          <Style Selector="^:selected /template/ ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+          </Style>
+          <Style Selector="^:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+          </Style>
+        </Style>
+      </ListBox.Styles>
+
+      <ListBox.ItemTemplate>
+        <DataTemplate>
+          <HtmlPanel Margin="0,2" Padding="0" Text="{Binding .}" />
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+    </ListBox>
+
 
     <Button Grid.Row="2"
             HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center"
