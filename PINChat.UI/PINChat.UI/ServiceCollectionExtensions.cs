@@ -14,7 +14,9 @@ public static class ServiceCollectionExtensions
             .AddTransient<ErrorDialogViewModel>()
             .AddTransient<LoginViewModel>()
             .AddTransient<ChatViewModel>()
+            .AddTransient<ProfileViewModel>()
             .AddTransient<MessagingViewModel>()
+            .AddTransient<ContactsViewModel>()
             .AddTransient<SignInViewModel>()
             .AddTransient<SignUpViewModel>();
         
@@ -45,8 +47,12 @@ public static class ServiceCollectionExtensions
             
             builder.RegisterView<ChatView, ChatViewModel>("ChatView");
             
+            builder.RegisterView<ProfileView, ProfileViewModel>("ProfileView");
+            
             builder.RegisterView<MessagingView, MessagingViewModel>("MessagingView");
             builder.RegisterView<MessagingMobileView, MessagingViewModel>("MessagingMobileView");
+
+            builder.RegisterView<ContactsView, ContactsViewModel>("ContactsView");
         });
 
         return services;

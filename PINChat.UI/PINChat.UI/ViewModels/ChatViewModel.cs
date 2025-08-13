@@ -54,6 +54,7 @@ public partial class ChatViewModel : ViewModelBase
                 ShowView(PlatformHelper.MessagingView);
                 break;
             case DockButton.Contacts:
+                ShowView("ContactsView");
                 break;
             case DockButton.Groups:
                 break;
@@ -63,6 +64,7 @@ public partial class ChatViewModel : ViewModelBase
             case DockButton.Settings:
                 break;
             case DockButton.Profile:
+                ShowView("ProfileView");
                 break;
             case DockButton.Logout:
                 Logout();
