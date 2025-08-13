@@ -25,4 +25,21 @@ public static class ContractMapping
             }),
         };
     }
+
+    public static UserResponse ToUserResponse(this ApplicationUser user)
+    {
+        return new UserResponse
+        {
+            UserId = user.Id,
+            UserName = user.UserName,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Avatar = user.Avatar
+        };
+    }
+
+    public static IEnumerable<UserResponse> ToResponse(this IEnumerable<ApplicationUser> users)
+    {
+        return users.Select(u => u.ToUserResponse());
+    }
 }

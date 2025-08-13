@@ -25,4 +25,12 @@ public static class ApiEndpoints
         
         public const string UploadImage = $"{Base}/upload-image";
     }
+    
+    public static class Users
+    {
+        private const string Base = $"{ApiBase}/users";
+        
+        public const string GetAll = $"{Base}";
+        public const string Update = $"{Base}/{{id:guid}}";
+    }
 }
