@@ -50,4 +50,21 @@ public static class Mapping
     {
         return messages.Select(m => m.ToModel());
     }
+    
+    public static UserModel ToModel(this UserResponse user)
+    {
+        return new UserModel()
+        {
+            UserId = user.UserId,
+            UserName = user.UserName,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Avatar = user.Avatar
+        };
+    }
+    
+    public static IEnumerable<UserModel> ToModels(this IEnumerable<UserResponse> users)
+    {
+        return users.Select(u => u.ToModel());
+    }
 }
