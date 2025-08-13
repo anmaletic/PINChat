@@ -13,7 +13,10 @@ public partial class UserModel : ObservableObject
     public string? UserName { get; set; }
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
-    public byte[]? Avatar { get; set; }
+    
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AvatarBitmap))]
+    private byte[]? _avatar;
     public string? AvatarPath { get; set; }
 
     [ObservableProperty]

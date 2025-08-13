@@ -1,0 +1,74 @@
+﻿<UserControl x:Class="PINChat.UI.Core.Components.ProfileCard"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             x:Name="Root"
+             d:DesignHeight="800"
+             d:DesignWidth="400"
+             mc:Ignorable="d">
+
+  <StackPanel HorizontalAlignment="Stretch">
+    <StackPanel.Styles>
+      <Style Selector="TextBox">
+
+        <!--  Disabled State  -->
+        <Style Selector="^:disabled">
+          <Setter Property="Foreground" Value="{DynamicResource TextControlForeground}" />
+
+          <Style Selector="^ /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="{DynamicResource TextControlBackground}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrush}" />
+          </Style>
+
+          <Style Selector="^ /template/ TextBlock#PART_Watermark, ^ /template/ TextBlock#PART_FloatingWatermark">
+            <Setter Property="Foreground" Value="{DynamicResource TextControlPlaceholderForeground}" />
+          </Style>
+        </Style>
+      </Style>
+    </StackPanel.Styles>
+
+
+    <Button Width="150" Height="150"
+            Margin="30" HorizontalAlignment="Center"
+            Background="{DynamicResource Color4}"
+            Command="{Binding ElementName=Root, Path=ChangeAvatarCommand}"
+            CornerRadius="5"
+            IsEnabled="{Binding ElementName=Root, Path=IsEditable}">
+      <Button.Content>
+        <Image Width="140" Height="140" Source="{Binding ElementName=Root, Path=User.AvatarBitmap}" />
+      </Button.Content>
+    </Button>
+
+    <Label Content="Username:" FontFamily="{StaticResource PoetsenOneFont}" />
+    <TextBox Margin="15,5,15,5"
+             FontFamily="{StaticResource PoetsenOneFont}"
+             FontSize="16"
+             IsEnabled="{Binding ElementName=Root, Path=IsEditable}"
+             Text="{Binding ElementName=Root, Path=User.UserName}" />
+
+    <Label Content="First name:" FontFamily="{StaticResource PoetsenOneFont}" />
+    <TextBox Margin="15,5,15,5"
+             FontFamily="{StaticResource PoetsenOneFont}"
+             FontSize="16"
+             IsEnabled="{Binding ElementName=Root, Path=IsEditable}"
+             Text="{Binding ElementName=Root, Path=User.FirstName}" />
+
+    <Label Content="Last name:" FontFamily="{StaticResource PoetsenOneFont}" />
+    <TextBox Margin="15,5,15,5"
+             FontFamily="{StaticResource PoetsenOneFont}"
+             FontSize="16"
+             IsEnabled="{Binding ElementName=Root, Path=IsEditable}"
+             Text="{Binding ElementName=Root, Path=User.LastName}" />
+
+    <Button Width="150"
+            Margin="0,15" HorizontalAlignment="Center" HorizontalContentAlignment="Center"
+            Background="{DynamicResource FontColor2}"
+            Command="{Binding ElementName=Root, Path=UpdateCommand}"
+            Content="Save"
+            FontFamily="{StaticResource PoetsenOneFont}"
+            Foreground="{DynamicResource FontColor1}"
+            IsVisible="{Binding ElementName=Root, Path=IsEditable}" />
+
+  </StackPanel>
+</UserControl>

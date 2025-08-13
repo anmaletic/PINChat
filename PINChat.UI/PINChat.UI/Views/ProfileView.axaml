@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="PINChat.UI.Views.ProfileView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:components="clr-namespace:PINChat.UI.Core.Components;assembly=PINChat.UI.Core"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:PINChat.UI.ViewModels"
+             d:DesignHeight="800"
+             d:DesignWidth="1300"
+             x:DataType="vm:ProfileViewModel"
+             Background="{DynamicResource Background}"
+             mc:Ignorable="d">
+  <Design.DataContext>
+    <vm:ProfileViewModel />
+  </Design.DataContext>
+
+  <Grid ColumnDefinitions="350, *">
+
+    <Grid Grid.Column="0">
+
+      <Label Margin="20" Content="Profile" FontFamily="{StaticResource PoetsenOneFont}" FontSize="18" />
+
+      <components:ProfileCard Margin="20,40,20,20"
+                              ChangeAvatarCommand="{Binding ChangeAvatarImageCommand}"
+                              IsEditable="True"
+                              UpdateCommand="{Binding UpdateProfileCommand}"
+                              User="{Binding LoggedInUser}" />
+
+      <Border Width="1" HorizontalAlignment="Right" BorderBrush="#666666" BorderThickness="1" />
+    </Grid>
+
+    <Grid Grid.Column="1">
+
+      <Label Margin="20" Content="Details" FontFamily="{StaticResource PoetsenOneFont}" FontSize="18" />
+
+    </Grid>
+
+    <components:LoadingControl Grid.Column="0" Grid.ColumnSpan="2" IsLoading="{Binding IsLoading}" />
+  </Grid>
+
+
+
+
+</UserControl>
