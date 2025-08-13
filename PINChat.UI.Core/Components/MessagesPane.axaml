@@ -39,7 +39,7 @@
 
     <ListBox Name="MessageListBox"
              Margin="20" Padding="10"
-             AutoScrollToSelectedItem="True" Background="Transparent"
+             AutoScrollToSelectedItem="True" Background="Transparent" Classes="NoSelect"
              ItemsSource="{Binding ElementName=Root, Path=Messages}">
 
       <ListBox.ItemsPanel>
@@ -48,25 +48,9 @@
         </ItemsPanelTemplate>
       </ListBox.ItemsPanel>
 
-      <ListBox.Styles>
-        <Style Selector="ListBoxItem">
-          <Setter Property="Focusable" Value="False" />
-          <Setter Property="Padding" Value="2" />
-          <!--  Remove default padding from ListBoxItem  -->
-          <Style Selector="^:selected /template/ ContentPresenter">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-          </Style>
-          <Style Selector="^:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-          </Style>
-        </Style>
-      </ListBox.Styles>
-
       <ListBox.ItemTemplate>
         <DataTemplate>
-          <Border Margin="0,0" Padding="10,5"
+          <Border Margin="0,2" Padding="10,5"
                   HorizontalAlignment="{Binding IsOrigin, Converter={StaticResource OwnMessageAlignmentConverter}}"
                   Background="{Binding IsOrigin, Converter={StaticResource OwnMessageBackgroundConverter}}"
                   CornerRadius="10">

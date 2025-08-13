@@ -17,23 +17,10 @@
              Foreground="{DynamicResource ColorBrush4}"
              MaxLines="1" TextChanged="TextBox_OnTextChanged" Watermark="Search contacts" />
 
-    <ListBox Grid.Row="1" Margin="5" Background="Transparent" ItemsSource="{Binding ElementName=Root, Path=FilteredContacts}">
-
-      <ListBox.Styles>
-        <Style Selector="ListBoxItem">
-          <Setter Property="Focusable" Value="False" />
-          <Setter Property="Padding" Value="0" />
-          <!--  Remove default padding from ListBoxItem  -->
-          <Style Selector="^:selected /template/ ContentPresenter">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-          </Style>
-          <Style Selector="^:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-          </Style>
-        </Style>
-      </ListBox.Styles>
+    <ListBox Grid.Row="1"
+             Margin="5"
+             Background="Transparent" Classes="NoSelect"
+             ItemsSource="{Binding ElementName=Root, Path=FilteredContacts}">
 
       <ListBox.ItemTemplate>
         <DataTemplate>

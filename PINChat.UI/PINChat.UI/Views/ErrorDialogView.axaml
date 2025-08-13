@@ -23,22 +23,7 @@
            Foreground="{DynamicResource FontColor1}" />
 
 
-    <ListBox Grid.Row="1" Background="#1e1e1e" ItemsSource="{Binding Errors}">
-      <ListBox.Styles>
-        <Style Selector="ListBoxItem">
-          <Setter Property="Focusable" Value="False" />
-          <Setter Property="Padding" Value="2" />
-          <!--  Remove default padding from ListBoxItem  -->
-          <Style Selector="^:selected /template/ ContentPresenter">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-          </Style>
-          <Style Selector="^:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-          </Style>
-        </Style>
-      </ListBox.Styles>
+    <ListBox Grid.Row="1" Background="#1e1e1e" Classes="NoSelect" ItemsSource="{Binding Errors}">
 
       <ListBox.ItemTemplate>
         <DataTemplate>
