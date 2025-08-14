@@ -27,12 +27,12 @@ public partial class MessagingViewModel : LoadableViewModelBase
     private readonly IChatApi _chatApi;
     private readonly IDialogService _dialogService;
     private readonly IMinioFrontendService _minioService;
-    
+
     private CancellationTokenSource? _cancellationTokenSource = new();
-    
+
     private CancellationTokenSource? _typingCancellationTokenSource;
     private const int TypingTimeoutMs = 1500;
-    
+
     [ObservableProperty]
     private UserModel _loggedInUser = new();
 
@@ -61,24 +61,39 @@ public partial class MessagingViewModel : LoadableViewModelBase
         _minioService = minioService;
 
         StrongReferenceMessenger.Default.Register<OnBackPressedMessage>(this, OnBackPressedMessageReceived);
-        
+
         LoggedInUser = loggedInUserService.User!;
-        
+
         _chatService.ConnectionStatusChanged += OnConnectionStatusChanged;
         _chatService.MessageReceived += OnMessageReceived;
         _chatService.MessageStatusUpdated += OnMessageStatusUpdated;
         _chatService.TypingStatusReceived += OnTypingStatusReceived;
-        
+
         _chatService.ConnectAsync();
     }
-    
+
     private void OnConnectionStatusChanged(object? sender, bool isConnected)
-        {
-            Console.WriteLine($"Chat Service Connection Status: {isConnected}");
-        }
+    {
+        Console.WriteLine($"Chat Service Connection Status: {isConnected}");
+    }
     private void OnMessageReceived(object? sender, MessageReceivedEventArgs e)
     {
         var backendMessage = e.Message;
+        
+        if (SelectedContact == null || 
+            (backendMessage.RecipientId == LoggedInUser.UserId &&
+            backendMessage.SenderId != SelectedContact.UserId))
+        {
+            Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                var contact = LoggedInUser.Contacts.FirstOrDefault(c => c.UserId == backendMessage.SenderId);
+                if (contact != null)
+                {
+                    contact.NewMessagesCount++;
+                }
+            });
+            return;
+        }
 
         var existingMsg = SelectedContact!.Messages.FirstOrDefault(m => m.Id == backendMessage.TempId);
 
@@ -131,7 +146,7 @@ public partial class MessagingViewModel : LoadableViewModelBase
             }
         });
     }
-    
+
     partial void OnNewMsgContentChanged(string value)
     {
         _ = SendTypingStatusUpdate();
@@ -174,6 +189,8 @@ public partial class MessagingViewModel : LoadableViewModelBase
             return;
         }
         
+        value.NewMessagesCount = 0;
+
         _cancellationTokenSource?.Cancel();
         _cancellationTokenSource = new CancellationTokenSource();
 
@@ -189,7 +206,7 @@ public partial class MessagingViewModel : LoadableViewModelBase
                 Console.WriteLine("No authentication token available to fetch chat history.");
                 return;
             }
-            
+
             cancellationToken.ThrowIfCancellationRequested();
 
             SelectedContact!.Messages.Clear();
@@ -205,7 +222,7 @@ public partial class MessagingViewModel : LoadableViewModelBase
             if (historyResponse.IsSuccessStatusCode && historyResponse.Content != null)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                
+
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
                     var msgs = historyResponse.Content.Messages.ToModels().ToList();
@@ -236,7 +253,7 @@ public partial class MessagingViewModel : LoadableViewModelBase
             IsLoadingMessages = false;
         }
     }
-    
+
     [RelayCommand]
     private async Task HandleKeyDown(KeyEventArgs e)
     {
@@ -397,7 +414,7 @@ public partial class MessagingViewModel : LoadableViewModelBase
             Console.WriteLine($"Error exporting messages to JSON: {ex.Message}");
         }
     }
-    
+
     private void OnBackPressedMessageReceived(object recipient, OnBackPressedMessage message)
     {
         if (!PlatformHelper.IsMobile())

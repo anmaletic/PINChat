@@ -15,6 +15,9 @@ public partial class UserModel : ObservableObject
     public string? LastName { get; set; }
     
     [ObservableProperty]
+    private int _newMessagesCount;
+    
+    [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(AvatarBitmap))]
     private byte[]? _avatar;
     public string? AvatarPath { get; set; }
@@ -23,6 +26,7 @@ public partial class UserModel : ObservableObject
     private bool _isTyping;
     
     public ObservableCollection<UserModel> Contacts { get; set; } = [];
+    public ObservableCollection<UserModel> AddedByOthers { get; set; } = [];
     public SmartObservableCollection<ChatMessageModel> Messages { get; set; } = [];
 
     public Bitmap? AvatarBitmap
