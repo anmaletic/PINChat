@@ -33,6 +33,52 @@
 
       <Label Margin="20" Content="Details" FontFamily="{StaticResource PoetsenOneFont}" FontSize="18" />
 
+      <StackPanel Margin="20,50,20,20">
+        <StackPanel.Styles>
+          <Style Selector="Label.Title">
+            <Setter Property="FontFamily" Value="{StaticResource PoetsenOneFont}" />
+            <Setter Property="FontSize" Value="16" />
+          </Style>
+
+          <Style Selector="Label.Content">
+            <Setter Property="FontFamily" Value="{StaticResource PoetsenOneFont}" />
+            <Setter Property="FontSize" Value="14" />
+          </Style>
+        </StackPanel.Styles>
+
+
+        <StackPanel Orientation="Horizontal" Spacing="10">
+          <Label Classes="Title" Content="User since:" />
+          <Label Classes="Content" Content="{Binding LoggedInUser.CreatedAt}" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Spacing="10">
+          <Label Classes="Title" Content="Days:" />
+          <Label Classes="Content" Content="{Binding DetailsDays}" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Spacing="10">
+          <Label Classes="Title" Content="Total sent messages:" />
+          <Label Classes="Content" Content="{Binding DetailsTotalMessages}" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Spacing="10">
+          <Label Classes="Title" Content="Most messages sent to:" />
+          <Label Classes="Content" Content="{Binding DetailsMostSentTo}" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Spacing="10">
+          <Label Classes="Title" Content="Number of contacts:" />
+          <Label Classes="Content" Content="{Binding LoggedInUser.Contacts.Count}" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Spacing="10">
+          <Label Classes="Title" Content="Number of requests:" />
+          <Label Classes="Content" Content="{Binding RequestCount}" />
+        </StackPanel>
+
+      </StackPanel>
+
     </Grid>
 
     <components:LoadingControl Grid.Column="0" Grid.ColumnSpan="2" IsLoading="{Binding IsLoading}" />

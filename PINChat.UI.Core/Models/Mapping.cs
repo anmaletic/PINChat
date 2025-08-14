@@ -16,6 +16,7 @@ public static class Mapping
             LastName = user.LastName,
             Avatar = user.Avatar,
             AvatarPath = user.AvatarPath,
+            CreatedAt = user.CreatedAt,
             Contacts = new ObservableCollection<UserModel>(
                 user.Contacts.Select(c => new UserModel
             {

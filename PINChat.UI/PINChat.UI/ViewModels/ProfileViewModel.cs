@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.Input;
@@ -17,6 +19,18 @@ public partial class ProfileViewModel : LoadableViewModelBase
     [ObservableProperty]
     private UserModel _loggedInUser;
 
+    [ObservableProperty]
+    private int _detailsDays;
+
+    [ObservableProperty]
+    private int _detailsTotalMessages;
+
+    [ObservableProperty]
+    private string _detailsMostSentTo;
+
+    [ObservableProperty]
+    private int _requestCount;
+
     public ProfileViewModel() : this(null!, null!, null!)
     {
     }
@@ -26,6 +40,8 @@ public partial class ProfileViewModel : LoadableViewModelBase
         _dialogService = dialogService;
         _chatApi = chatApi;
         _loggedInUser = loggedInUserService.User!;
+        
+        LoadDetails();
     }
 
     [RelayCommand]
@@ -51,13 +67,32 @@ public partial class ProfileViewModel : LoadableViewModelBase
             LastName = LoggedInUser.LastName,
             Avatar = LoggedInUser.Avatar
         };
-        
+
         IsLoading = true;
 
-        var result = await _chatApi.UpdateUser(LoggedInUser.UserId, update, 
+        var result = await _chatApi.UpdateUser(LoggedInUser.UserId, update,
             $"Bearer {LoggedInUser.Token}");
 
         IsLoading = false;
     }
-    
+
+    private void LoadDetails()
+    {
+        DetailsDays = (DateTime.Now - LoggedInUser.CreatedAt).Days;
+            
+        var mostSentToCount = 0;
+
+        foreach (var contact in LoggedInUser.Contacts)
+        {
+            if (contact.Messages.Count > mostSentToCount)
+            {
+                mostSentToCount = contact.Messages.Count;
+                DetailsMostSentTo = contact.UserName!;
+            }
+            
+            DetailsTotalMessages += contact.Messages.Count;
+        }
+        
+        RequestCount = LoggedInUser.AddedByOthers.Count(u => LoggedInUser.Contacts.All(c => c.UserId != u.UserId));
+    }
 }
