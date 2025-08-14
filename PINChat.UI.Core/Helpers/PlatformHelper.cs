@@ -11,4 +11,5 @@ public static class PlatformHelper
     public static string SignUpView => IsMobile() ? "SignUpMobileView" : "SignUpView";
     public static string ChatView => "ChatView";
     public static string MessagingView => IsMobile() ? "MessagingMobileView" : "MessagingView";
+    public static string ProfileView => IsMobile() ? "ProfileMobileView" : "ProfileView";
 }

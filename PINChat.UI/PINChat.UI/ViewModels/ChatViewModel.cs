@@ -64,7 +64,7 @@ public partial class ChatViewModel : ViewModelBase
             case DockButton.Settings:
                 break;
             case DockButton.Profile:
-                ShowView("ProfileView");
+                ShowView(PlatformHelper.ProfileView);
                 break;
             case DockButton.Logout:
                 Logout();

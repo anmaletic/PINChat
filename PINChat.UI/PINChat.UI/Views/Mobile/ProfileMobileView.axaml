@@ -1,0 +1,82 @@
+﻿<UserControl x:Class="PINChat.UI.Views.Mobile.ProfileMobileView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:components="clr-namespace:PINChat.UI.Core.Components;assembly=PINChat.UI.Core"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:PINChat.UI.ViewModels"
+             d:DesignHeight="800"
+             d:DesignWidth="1300"
+             x:DataType="vm:ProfileViewModel"
+             Background="{DynamicResource Background}"
+             mc:Ignorable="d">
+  <Design.DataContext>
+    <vm:ProfileViewModel />
+  </Design.DataContext>
+
+  <ScrollViewer>
+    <Grid>
+      <StackPanel>
+        <Label Margin="20" Content="Profile" FontFamily="{StaticResource PoetsenOneFont}" FontSize="20" />
+
+        <components:ProfileCard Margin="20,0"
+                                ChangeAvatarCommand="{Binding ChangeAvatarImageCommand}"
+                                IsEditable="True"
+                                UpdateCommand="{Binding UpdateProfileCommand}"
+                                User="{Binding LoggedInUser}" />
+
+        <Label Margin="20,20,20,10" Content="Details" FontFamily="{StaticResource PoetsenOneFont}" FontSize="20" />
+
+        <StackPanel Margin="20,0,20,20">
+          <StackPanel.Styles>
+            <Style Selector="Label.Title">
+              <Setter Property="FontFamily" Value="{StaticResource PoetsenOneFont}" />
+              <Setter Property="FontSize" Value="16" />
+              <Setter Property="Margin" Value="20,0" />
+            </Style>
+
+            <Style Selector="Label.Content">
+              <Setter Property="FontFamily" Value="{StaticResource PoetsenOneFont}" />
+              <Setter Property="FontSize" Value="14" />
+              <Setter Property="Margin" Value="25,0,20,5" />
+            </Style>
+          </StackPanel.Styles>
+
+
+          <StackPanel Spacing="2">
+            <Label Classes="Title" Content="User since:" />
+            <Label Classes="Content" Content="{Binding LoggedInUser.CreatedAt}" />
+          </StackPanel>
+
+          <StackPanel Spacing="2">
+            <Label Classes="Title" Content="Days:" />
+            <Label Classes="Content" Content="{Binding DetailsDays}" />
+          </StackPanel>
+
+          <StackPanel Spacing="2">
+            <Label Classes="Title" Content="Total sent messages:" />
+            <Label Classes="Content" Content="{Binding DetailsTotalMessages}" />
+          </StackPanel>
+
+          <StackPanel Spacing="2">
+            <Label Classes="Title" Content="Most messages sent to:" />
+            <Label Classes="Content" Content="{Binding DetailsMostSentTo}" />
+          </StackPanel>
+
+          <StackPanel Spacing="2">
+            <Label Classes="Title" Content="Number of contacts:" />
+            <Label Classes="Content" Content="{Binding LoggedInUser.Contacts.Count}" />
+          </StackPanel>
+
+          <StackPanel Spacing="2">
+            <Label Classes="Title" Content="Number of requests:" />
+            <Label Classes="Content" Content="{Binding RequestCount}" />
+          </StackPanel>
+
+        </StackPanel>
+      </StackPanel>
+
+      <components:LoadingControl IsLoading="{Binding IsLoading}" />
+    </Grid>
+  </ScrollViewer>
+</UserControl>

@@ -48,6 +48,7 @@ public static class ServiceCollectionExtensions
             builder.RegisterView<ChatView, ChatViewModel>("ChatView");
             
             builder.RegisterView<ProfileView, ProfileViewModel>("ProfileView");
+            builder.RegisterView<ProfileMobileView, ProfileViewModel>("ProfileMobileView");
             
             builder.RegisterView<MessagingView, MessagingViewModel>("MessagingView");
             builder.RegisterView<MessagingMobileView, MessagingViewModel>("MessagingMobileView");
