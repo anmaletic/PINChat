@@ -1,0 +1,98 @@
+﻿<UserControl x:Class="PINChat.UI.Core.Components.ContactItem"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:components="clr-namespace:PINChat.UI.Core.Components"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:fa="https://github.com/projektanker/icons.avalonia"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             x:Name="Root"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             mc:Ignorable="d">
+
+  <RadioButton Height="50"
+               Padding="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
+               BorderBrush="{DynamicResource Color4}"
+               BorderThickness="1" Classes="Dock"
+               Command="{Binding ElementName=Root, Path=SelectedContactCommand}"
+               CommandParameter="{Binding .}"
+               CornerRadius="10"
+               Foreground="{DynamicResource ColorBrush4}"
+               GroupName="Dock">
+
+    <RadioButton.Content>
+      <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ColumnDefinitions="60, *, Auto">
+        <Border Grid.Column="0"
+                Width="40" Height="40"
+                Background="{DynamicResource ColorBrush1}"
+                CornerRadius="15">
+          <components:AvatarImage AvatarSource="{Binding ElementName=Root, Path=User.AvatarBitmap}" Radius="15" Rect="0,0,40,40" Size="40" />
+        </Border>
+        <Label Grid.Column="1"
+               VerticalContentAlignment="Top"
+               Content="{Binding ElementName=Root, Path=User.UserName}"
+               FontFamily="{StaticResource PoetsenOneFont}"
+               FontSize="16" />
+        <Label Grid.Column="1"
+               VerticalContentAlignment="Bottom"
+               Content="Typing..."
+               FontFamily="{StaticResource PoetsenOneFont}"
+               FontSize="12"
+               IsVisible="{Binding ElementName=Root, Path=User.IsTyping}" />
+
+        <!--  Type.ReadOnly  -->
+        <Label Name="LblMsgCount"
+               Grid.Column="2"
+               Height="25"
+               Margin="0,0,10,0" Padding="5,0" HorizontalAlignment="Right" VerticalAlignment="Center"
+               HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+               Background="{DynamicResource Color4}"
+               Content="{Binding ElementName=Root, Path=User.NewMessagesCount}"
+               CornerRadius="10"
+               FontFamily="{StaticResource PoetsenOneFont}"
+               Foreground="{DynamicResource FontColor1}"
+               IsVisible="{Binding ElementName=Root, Path=User.NewMessagesCount}" />
+
+        <!--  Type.Remove  -->
+        <Button Name="BtnRemove"
+                Grid.Column="2"
+                Width="40" Height="40"
+                Margin="0,0,10,0" HorizontalAlignment="Right" VerticalAlignment="Center"
+                Background="{DynamicResource FontColor3}"
+                CornerRadius="15" FontSize="16"
+                Foreground="{DynamicResource FontColor1}">
+          <fa:Icon Value="fa-solid fa-minus" />
+        </Button>
+
+        <!--  Type.Add  -->
+        <Button Name="BtnAdd"
+                Grid.Column="2"
+                Width="40" Height="40"
+                Margin="0,0,10,0" HorizontalAlignment="Right" VerticalAlignment="Center"
+                Background="{DynamicResource FontColor2}"
+                CornerRadius="15" FontSize="16"
+                Foreground="{DynamicResource FontColor1}">
+          <fa:Icon Value="fa-solid fa-plus" />
+        </Button>
+
+        <Interaction.Behaviors>
+          <DataTriggerBehavior Binding="{Binding ElementName=Root, Path=Type}" ComparisonCondition="Equal" Value="ReadOnly">
+            <ChangePropertyAction PropertyName="IsVisible" TargetObject="BtnAdd" Value="False" />
+            <ChangePropertyAction PropertyName="IsVisible" TargetObject="BtnRemove" Value="False" />
+          </DataTriggerBehavior>
+          <DataTriggerBehavior Binding="{Binding ElementName=Root, Path=Type}" ComparisonCondition="Equal" Value="Add">
+            <ChangePropertyAction PropertyName="IsVisible" TargetObject="LblMsgCount" Value="False" />
+            <ChangePropertyAction PropertyName="IsVisible" TargetObject="BtnAdd" Value="True" />
+            <ChangePropertyAction PropertyName="IsVisible" TargetObject="BtnRemove" Value="False" />
+          </DataTriggerBehavior>
+          <DataTriggerBehavior Binding="{Binding ElementName=Root, Path=Type}" ComparisonCondition="Equal" Value="Remove">
+            <ChangePropertyAction PropertyName="IsVisible" TargetObject="LblMsgCount" Value="False" />
+            <ChangePropertyAction PropertyName="IsVisible" TargetObject="BtnAdd" Value="False" />
+            <ChangePropertyAction PropertyName="IsVisible" TargetObject="BtnRemove" Value="True" />
+          </DataTriggerBehavior>
+        </Interaction.Behaviors>
+
+      </Grid>
+    </RadioButton.Content>
+  </RadioButton>
+</UserControl>

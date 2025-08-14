@@ -1,7 +1,9 @@
 ﻿<UserControl x:Class="PINChat.UI.Core.Components.ContactsPane"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:components="clr-namespace:PINChat.UI.Core.Components"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:fa="https://github.com/projektanker/icons.avalonia"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              x:Name="Root"
              d:DesignHeight="450"
@@ -24,37 +26,10 @@
 
       <ListBox.ItemTemplate>
         <DataTemplate>
-          <RadioButton Height="50"
-                       Margin="20,2" Padding="0" HorizontalAlignment="Stretch"
-                       BorderThickness="0" Classes="Dock"
-                       Command="{Binding ElementName=Root, Path=SelectContactCommand}"
-                       CommandParameter="{Binding .}"
-                       CornerRadius="10"
-                       Foreground="{DynamicResource ColorBrush4}"
-                       GroupName="Dock">
-            <RadioButton.Content>
-              <Grid ColumnDefinitions="60, *">
-                <Border Grid.Column="0"
-                        Width="40" Height="40"
-                        Background="{DynamicResource ColorBrush1}"
-                        BorderBrush="{DynamicResource ColorBrush3}"
-                        BorderThickness="1" CornerRadius="10">
-                  <Image Width="40" Height="40" Source="{Binding AvatarBitmap}" />
-                </Border>
-                <Label Grid.Column="1"
-                       VerticalContentAlignment="Top"
-                       Content="{Binding UserName}"
-                       FontFamily="{StaticResource PoetsenOneFont}"
-                       FontSize="16" />
-                <Label Grid.Column="1"
-                       VerticalContentAlignment="Bottom"
-                       Content="Typing..."
-                       FontFamily="{StaticResource PoetsenOneFont}"
-                       FontSize="12"
-                       IsVisible="{Binding IsTyping}" />
-              </Grid>
-            </RadioButton.Content>
-          </RadioButton>
+          <components:ContactItem Margin="20,2" HorizontalAlignment="Stretch"
+                                  SelectedContactCommand="{Binding ElementName=Root, Path=SelectContactCommand}"
+                                  Type="ReadOnly"
+                                  User="{Binding}" />
         </DataTemplate>
       </ListBox.ItemTemplate>
     </ListBox>
