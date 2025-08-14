@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:PINChat.UI.ViewModels"
+             Name="Root"
              d:DesignHeight="800"
              d:DesignWidth="1300"
              x:DataType="vm:ContactsViewModel"
@@ -20,13 +21,94 @@
 
       <Label Margin="20" Content="Contacts" FontFamily="{StaticResource PoetsenOneFont}" FontSize="18" />
 
-      <components:ContactsPane Margin="20,40,20,20" Contacts="{Binding AllContacts}" />
+      <ScrollViewer Margin="0,50,0,0">
+        <StackPanel>
+
+          <Label Margin="10" Content="My contacts:" FontFamily="{StaticResource PoetsenOneFont}" FontSize="14" />
+
+          <ListBox Margin="20,0,20,0"
+                   Background="Transparent" BorderThickness="0" Classes="NoSelect"
+                   ItemsSource="{Binding LoggedInUser.Contacts}">
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <components:ContactItem Margin="20,2" HorizontalAlignment="Stretch"
+                                        ButtonCommand="{Binding ElementName=Root, Path=DataContext.RemoveContactCommand}"
+                                        Type="Remove"
+                                        User="{Binding .}" />
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+
+        </StackPanel>
+      </ScrollViewer>
 
       <Border Width="1" HorizontalAlignment="Right" BorderBrush="#666666" BorderThickness="1" />
     </Grid>
 
-    <Grid Grid.Column="1" />
+    <Grid Grid.Column="1">
+      <ScrollViewer>
+        <StackPanel>
 
-    <components:LoadingControl Grid.Column="0" Grid.ColumnSpan="2" IsLoading="{Binding IsLoading}" />
+          <Label Margin="10" HorizontalAlignment="Center"
+                 Content="Users that added me:"
+                 FontFamily="{StaticResource PoetsenOneFont}"
+                 FontSize="14" />
+
+          <ListBox Margin="20,0,20,0"
+                   Background="Transparent" BorderThickness="0" Classes="NoSelect"
+                   ItemsSource="{Binding AddedByOthersContacts}">
+            <ListBox.ItemsPanel>
+              <ItemsPanelTemplate>
+                <WrapPanel Orientation="Horizontal" />
+              </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <components:ContactItem Width="220"
+                                        Margin="20,2" HorizontalAlignment="Stretch"
+                                        ButtonCommand="{Binding ElementName=Root, Path=DataContext.AddContactCommand}"
+                                        Type="Add"
+                                        User="{Binding .}" />
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+
+          <Label Margin="10" HorizontalAlignment="Center"
+                 Content="All users:"
+                 FontFamily="{StaticResource PoetsenOneFont}"
+                 FontSize="14" />
+
+          <ListBox Margin="20,0,20,0"
+                   Background="Transparent" BorderThickness="0" Classes="NoSelect"
+                   ItemsSource="{Binding FilteredAllContacts}">
+            <ListBox.ItemsPanel>
+              <ItemsPanelTemplate>
+                <WrapPanel Orientation="Horizontal" />
+              </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <components:ContactItem Width="220"
+                                        Margin="20,2" HorizontalAlignment="Stretch"
+                                        ButtonCommand="{Binding ElementName=Root, Path=DataContext.AddContactCommand}"
+                                        Type="Add"
+                                        User="{Binding .}" />
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+
+        </StackPanel>
+      </ScrollViewer>
+    </Grid>
+
+    <Grid Grid.Column="0"
+          HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+          Background="#36575757" ColumnSpan="2"
+          IsVisible="{Binding IsLoading}">
+      <components:LoadingControl HorizontalAlignment="Center" VerticalAlignment="Center" IsLoading="{Binding IsLoading}" />
+    </Grid>
+
   </Grid>
 </UserControl>

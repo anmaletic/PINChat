@@ -35,6 +35,15 @@ public partial class ContactItem : UserControl
         get => GetValue(SelectedContactCommandProperty);
         set => SetValue(SelectedContactCommandProperty, value);
     }
+
+    public static readonly StyledProperty<ICommand?> ButtonCommandProperty = AvaloniaProperty.Register<ContactItem, ICommand?>(
+        nameof(ButtonCommand));
+
+    public ICommand? ButtonCommand
+    {
+        get => GetValue(ButtonCommandProperty);
+        set => SetValue(ButtonCommandProperty, value);
+    }
     
     public ContactItem()
     {

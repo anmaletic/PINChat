@@ -25,7 +25,17 @@ public static class Mapping
                 LastName = c.LastName,
                 Avatar = c.Avatar,
                 AvatarPath = c.AvatarPath
-            }))
+            })),
+            AddedByOthers = new ObservableCollection<UserModel>(
+                user.AddedByOthers.Select(c => new UserModel
+                {
+                    UserId = c.UserId,
+                    UserName = c.UserName,
+                    FirstName = c.FirstName,
+                    LastName = c.LastName,
+                    Avatar = c.Avatar,
+                    AvatarPath = c.AvatarPath
+                }))
         };
     }
     

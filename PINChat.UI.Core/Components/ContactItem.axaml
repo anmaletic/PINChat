@@ -59,6 +59,8 @@
                 Width="40" Height="40"
                 Margin="0,0,10,0" HorizontalAlignment="Right" VerticalAlignment="Center"
                 Background="{DynamicResource FontColor3}"
+                Command="{Binding ElementName=Root, Path=ButtonCommand}"
+                CommandParameter="{Binding ElementName=Root, Path=User}"
                 CornerRadius="15" FontSize="16"
                 Foreground="{DynamicResource FontColor1}">
           <fa:Icon Value="fa-solid fa-minus" />
@@ -70,6 +72,8 @@
                 Width="40" Height="40"
                 Margin="0,0,10,0" HorizontalAlignment="Right" VerticalAlignment="Center"
                 Background="{DynamicResource FontColor2}"
+                Command="{Binding ElementName=Root, Path=ButtonCommand}"
+                CommandParameter="{Binding ElementName=Root, Path=User}"
                 CornerRadius="15" FontSize="16"
                 Foreground="{DynamicResource FontColor1}">
           <fa:Icon Value="fa-solid fa-plus" />
