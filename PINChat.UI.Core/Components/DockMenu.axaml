@@ -1,6 +1,7 @@
 ﻿<UserControl x:Class="PINChat.UI.Core.Components.DockMenu"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:components="clr-namespace:PINChat.UI.Core.Components"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:enums="clr-namespace:PINChat.Core.Domain.Enums;assembly=PINChat.Core"
              xmlns:fa="https://github.com/projektanker/icons.avalonia"
@@ -61,8 +62,8 @@
       <Button CommandParameter="{x:Static enums:DockButton.Settings}">
         <fa:Icon Value="fa-solid fa-gear" />
       </Button>
-      <Button CommandParameter="{x:Static enums:DockButton.Profile}">
-        <Image Width="30" Height="30" Source="{Binding ElementName=Root, Path=Avatar}" />
+      <Button Padding="-1" CommandParameter="{x:Static enums:DockButton.Profile}">
+        <components:AvatarImage AvatarSource="{Binding ElementName=Root, Path=Avatar}" Radius="15" Rect="0,0,42,42" Size="42" />
       </Button>
       <Button CommandParameter="{x:Static enums:DockButton.Logout}">
         <fa:Icon Value="fa-solid fa-arrow-right-from-bracket" />

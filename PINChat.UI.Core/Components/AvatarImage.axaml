@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="PINChat.UI.Core.Components.AvatarImage"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             x:Name="Root"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             mc:Ignorable="d">
+
+  <Image Width="{Binding ElementName=Root, Path=Size}" Height="{Binding ElementName=Root, Path=Size}" Source="{Binding ElementName=Root, Path=AvatarSource}" Stretch="UniformToFill">
+    <Image.Clip>
+      <RectangleGeometry RadiusX="{Binding ElementName=Root, Path=Radius}" RadiusY="{Binding ElementName=Root, Path=Radius}" Rect="{Binding ElementName=Root, Path=Rect}" />
+    </Image.Clip>
+  </Image>
+</UserControl>

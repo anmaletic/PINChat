@@ -1,6 +1,7 @@
 ﻿<UserControl x:Class="PINChat.UI.Core.Components.ProfileCard"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:components="clr-namespace:PINChat.UI.Core.Components"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              x:Name="Root"
@@ -30,13 +31,13 @@
 
 
     <Button Width="150" Height="150"
-            Margin="30" HorizontalAlignment="Center"
+            Margin="30" Padding="-1" HorizontalAlignment="Center"
             Background="{DynamicResource Color4}"
             Command="{Binding ElementName=Root, Path=ChangeAvatarCommand}"
-            CornerRadius="5"
+            CornerRadius="30"
             IsEnabled="{Binding ElementName=Root, Path=IsEditable}">
       <Button.Content>
-        <Image Width="140" Height="140" Source="{Binding ElementName=Root, Path=User.AvatarBitmap}" />
+        <components:AvatarImage AvatarSource="{Binding ElementName=Root, Path=User.AvatarBitmap}" Radius="30" Rect="0,0,152,152" Size="152" />
       </Button.Content>
     </Button>
 
