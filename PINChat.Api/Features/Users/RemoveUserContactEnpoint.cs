@@ -1,14 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PINChat.Persistence.Db.Contexts;
 
 namespace PINChat.Api.Features.Users;
 
 public class RemoveUserContactEnpoint : Endpoint<UserContactRequest, UserContactResponse>
 {
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly AppDbContext _dbContext;
     
-    public RemoveUserContactEnpoint(UserManager<ApplicationUser> userManager)
+    public RemoveUserContactEnpoint(UserManager<ApplicationUser> userManager, AppDbContext dbContext)
     {
-        _userManager = userManager;
+        _dbContext = dbContext;
     }
 
     public override void Configure()
@@ -32,27 +33,17 @@ public class RemoveUserContactEnpoint : Endpoint<UserContactRequest, UserContact
             return;
         }
 
-        var user = await _userManager.Users
-            .Include(u => u.MyContacts)
-            .FirstOrDefaultAsync(u => u.Id == currentUserId, ct);
+        var contactToRemove = await _dbContext.Contacts
+            .FirstOrDefaultAsync(c => c.UserId == currentUserId && c.ContactUserId == req.ContactId, ct);
 
-        if (user == null)
-        {
-            await Send.NotFoundAsync(ct);
-            return;
-        }
-
-        var contactToRemove = user.MyContacts.FirstOrDefault(c => c.ContactUserId == req.ContactId);
-        
         if (contactToRemove == null)
         {
             await Send.NotFoundAsync(ct);
             return;
         }
 
-        user.MyContacts.Remove(contactToRemove);
-
-        await _userManager.UpdateAsync(user);
+        _dbContext.Contacts.Remove(contactToRemove);
+        await _dbContext.SaveChangesAsync(ct);
 
         await Send.OkAsync(new UserContactResponse
         {
