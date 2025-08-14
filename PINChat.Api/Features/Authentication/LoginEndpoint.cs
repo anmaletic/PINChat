@@ -33,8 +33,6 @@ public class LoginEndpoint : Endpoint<LoginRequest, LoginResponse>
     public override async Task HandleAsync(LoginRequest req, CancellationToken ct)
     {
         var user = await _userManager.Users
-            .Include(u => u.MyContacts)
-            .ThenInclude(c => c.ContactUser)
             .SingleOrDefaultAsync(u => u.UserName == req.UserName, cancellationToken: ct);
 
         if (user == null)
@@ -55,8 +53,40 @@ public class LoginEndpoint : Endpoint<LoginRequest, LoginResponse>
 
         var token = _jwtService.GenerateToken(user);
 
-        var response = user.ToResponse();
-        response.Token = token;
+        var response = await _userManager.Users
+            .Where(u => u.Id == user.Id)
+            .Select(u => new LoginResponse
+            {
+                Token = token,
+                UserId = u.Id,
+                UserName = u.UserName!,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Avatar = u.Avatar!,
+                AvatarPath = u.AvatarPath,
+                Message = string.Empty,
+                Contacts = u.MyContacts.Select(c => new LoginResponse()
+                {
+                    UserId = c.ContactUser.Id,
+                    UserName = c.ContactUser.UserName!,
+                    FirstName = c.ContactUser.FirstName,
+                    LastName = c.ContactUser.LastName,
+                    Avatar = c.ContactUser.Avatar!,
+                    AvatarPath = c.ContactUser.AvatarPath,
+                    Message = string.Empty
+                }),
+                AddedByOthers = u.AddedByOthers.Select(c => new LoginResponse()
+                {
+                    UserId = c.User.Id,
+                    UserName = c.User.UserName!,
+                    FirstName = c.User.FirstName,
+                    LastName = c.User.LastName,
+                    Avatar = c.User.Avatar!,
+                    AvatarPath = c.User.AvatarPath,
+                    Message = string.Empty
+                }),
+            })
+            .SingleAsync(cancellationToken: ct);
 
         await Send.ResponseAsync(response, cancellation: ct);
     }

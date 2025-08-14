@@ -23,6 +23,16 @@ public static class ContractMapping
                 AvatarPath = c.ContactUser.AvatarPath,
                 Message = string.Empty
             }),
+            AddedByOthers = user.AddedByOthers.Select(c => new LoginResponse()
+            {
+                UserId = c.ContactUser.Id,
+                UserName = c.ContactUser.UserName!,
+                FirstName = c.ContactUser.FirstName,
+                LastName = c.ContactUser.LastName,
+                Avatar = c.ContactUser.Avatar ?? [],
+                AvatarPath = c.ContactUser.AvatarPath,
+                Message = string.Empty
+            }),
         };
     }
 

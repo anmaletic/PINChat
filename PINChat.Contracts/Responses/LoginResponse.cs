@@ -10,5 +10,6 @@ public record LoginResponse
     public required byte[] Avatar { get; set; } = [];
     public string? AvatarPath { get; set; }
     public IEnumerable<LoginResponse> Contacts { get; set; } = [];
+    public IEnumerable<LoginResponse> AddedByOthers { get; set; } = [];
     public required string Message { get; set; }
 }
