@@ -21,4 +21,16 @@ public interface IChatApi
     [Get(ApiEndpoints.Users.GetAll)]
     Task<ApiResponse<GetAllUsersResponse>> GetAllUsers(
         [Header("Authorization")] string authorization);
+    
+    [Post(ApiEndpoints.Users.AddContact)]
+    Task<ApiResponse<UserContactResponse>> AddUserContact(
+        string userId,
+        [Body] UserContactRequest request,
+        [Header("Authorization")] string authorization);
+    
+    [Delete(ApiEndpoints.Users.RemoveContact)]
+    Task<ApiResponse<UserContactResponse>> RemoveUserContact(
+        string userId,
+        [Body] UserContactRequest request,
+        [Header("Authorization")] string authorization);
 }
