@@ -25,6 +25,7 @@
     <FluentTheme />
     <StyleInclude Source="avares://AvaloniaProgressRing/Styles/ProgressRing.xaml" />
     <StyleInclude Source="avares://PINChat.UI.Core/Assets/Styles/RadioButtonDock.axaml" />
+    <StyleInclude Source="avares://PINChat.UI.Core/Assets/Styles/RadioButtonNav.axaml" />
     <StyleInclude Source="avares://PINChat.UI.Core/Assets/Styles/ListBoxNoSelect.axaml" />
   </Application.Styles>
 </Application>

@@ -1,0 +1,41 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Design.PreviewWith>
+    <StackPanel Orientation="Horizontal" Spacing="10">
+      <!--  Add Controls for Previewer Here  -->
+      <RadioButton Margin="10" Classes="Nav" Content="My contacts" IsChecked="True" />
+      <RadioButton Margin="10" Classes="Nav" Content="All contacts" IsChecked="False" />
+    </StackPanel>
+  </Design.PreviewWith>
+
+  <!--  Add Styles Here  -->
+  <Style Selector="RadioButton.Nav">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate>
+          <Border Width="{TemplateBinding Width}"
+                  Height="{TemplateBinding Height}"
+                  Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  CornerRadius="{TemplateBinding CornerRadius}">
+            <ContentPresenter Name="PART_ContentPresenter"
+                              Margin="{TemplateBinding Padding}"
+                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              Opacity="1" RecognizesAccessKey="True" />
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+
+    <!--  Checked State  -->
+    <Style Selector="^:checked /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="FontWeight" Value="Bold" />
+      <Setter Property="BorderThickness" Value="0,0,0,2" />
+      <Setter Property="BorderBrush" Value="{TemplateBinding Foreground}" />
+    </Style>
+  </Style>
+</Styles>
