@@ -32,5 +32,7 @@ public static class ApiEndpoints
         
         public const string GetAll = $"{Base}";
         public const string Update = $"{Base}/{{id:guid}}";
+        public const string AddContact = $"{Base}/{{id:guid}}/add-contact";
+        public const string RemoveContact = $"{Base}/{{id:guid}}/remove-contact";
     }
 }
