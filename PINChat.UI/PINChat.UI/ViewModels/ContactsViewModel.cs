@@ -22,6 +22,9 @@ public partial class ContactsViewModel : LoadableViewModelBase
     
     [ObservableProperty]
     private UserModel _selectedContact;
+    
+    [ObservableProperty]
+    private bool _isMyContactsTabSelected = true;
 
     private List<UserModel> _allContacts;
     

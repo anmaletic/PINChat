@@ -54,6 +54,7 @@ public static class ServiceCollectionExtensions
             builder.RegisterView<MessagingMobileView, MessagingViewModel>("MessagingMobileView");
 
             builder.RegisterView<ContactsView, ContactsViewModel>("ContactsView");
+            builder.RegisterView<ContactsMobileView, ContactsViewModel>("ContactsMobileView");
         });
 
         return services;
