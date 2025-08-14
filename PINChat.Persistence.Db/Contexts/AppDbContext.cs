@@ -8,6 +8,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     }
     
     public DbSet<Message> Messages { get; set; }
+    public DbSet<Contact> Contacts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
