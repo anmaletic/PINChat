@@ -64,6 +64,7 @@ public class LoginEndpoint : Endpoint<LoginRequest, LoginResponse>
                 LastName = u.LastName,
                 Avatar = u.Avatar!,
                 AvatarPath = u.AvatarPath,
+                CreatedAt = u.CreatedAt,
                 Message = string.Empty,
                 Contacts = u.MyContacts.Select(c => new LoginResponse()
                 {
