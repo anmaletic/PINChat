@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PINChat.Api.Mapping;
 using PINChat.Persistence.Db.Contexts;
 
 namespace PINChat.Api.Features.Messages;
@@ -15,7 +16,7 @@ public class GetChatHistoryEndpoint : Endpoint<GetChatHistoryRequest, GetChatHis
     public override void Configure()
     {
         Get(ApiEndpoints.Messages.GetChatHistory);
-        AuthSchemes(Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme); // Require JWT authentication
+        AuthSchemes(Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme);
         Summary(s =>
         {
             s.Summary = "Retrieves chat history between the authenticated user and a specific contact.";
@@ -30,7 +31,6 @@ public class GetChatHistoryEndpoint : Endpoint<GetChatHistoryRequest, GetChatHis
 
         if (string.IsNullOrEmpty(currentUserId))
         {
-            // This should ideally not happen if AuthSchemes is configured correctly
             await Send.UnauthorizedAsync(ct);
             return;
         }
@@ -39,24 +39,12 @@ public class GetChatHistoryEndpoint : Endpoint<GetChatHistoryRequest, GetChatHis
         // (Sender is current user AND Recipient is contact) OR
         // (Sender is contact AND Recipient is current user)
         var messages = await _dbContext.Messages
-            .Include(m => m.Sender) // Include Sender to get DisplayName
+            .Include(m => m.Sender)
             .Where(m =>
                 (m.SenderId == currentUserId && m.RecipientId == req.ContactId) ||
                 (m.SenderId == req.ContactId && m.RecipientId == currentUserId))
             .OrderBy(m => m.Timestamp)
-            .Select(m => new MessageResponse()
-            {
-                Id = m.Id,
-                Timestamp = m.Timestamp,
-                SenderId = m.SenderId,
-                RecipientId = m.RecipientId,
-                ImagePath = m.ImagePath,
-                MessageType = m.MessageType,
-                Content = m.Content,
-                IsSent = m.IsSent,
-                IsReceived = m.IsReceived,
-                IsRead = m.IsRead
-            })
+            .Select(m => m.ToResponse())
             .ToListAsync(ct);
 
         await Send.ResponseAsync(new GetChatHistoryResponse

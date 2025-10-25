@@ -52,4 +52,26 @@ public static class ContractMapping
     {
         return users.Select(u => u.ToUserResponse());
     }
+
+    public static MessageResponse ToResponse(this Message msg)
+    {
+        return new MessageResponse()
+        {
+            Id = msg.Id,
+            Timestamp = msg.Timestamp,
+            SenderId = msg.SenderId,
+            RecipientId = msg.RecipientId,
+            ImagePath = msg.ImagePath,
+            MessageType = msg.MessageType,
+            Content = msg.Content,
+            IsSent = msg.IsSent,
+            IsReceived = msg.IsReceived,
+            IsRead = msg.IsRead
+        };
+    }
+    
+    public static IEnumerable<MessageResponse> ToResponse(this IEnumerable<Message> messages)
+    {
+        return messages.Select(m => m.ToResponse());
+    }
 }
