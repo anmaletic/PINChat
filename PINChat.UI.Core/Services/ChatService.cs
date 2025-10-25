@@ -9,6 +9,8 @@ namespace PINChat.UI.Core.Services;
 
 public partial class ChatService : ObservableObject, IChatService
 {
+    private string _hubUrl = "https://pinchat-v2-chat-server.anmal.dev/chathub";
+    
     private HubConnection _hubConnection;
     private readonly ILoggedInUserService _loggedInUserService;
 
@@ -26,7 +28,7 @@ public partial class ChatService : ObservableObject, IChatService
 
         // Initialize HubConnection
         _hubConnection = new HubConnectionBuilder()
-            .WithUrl("https://pinchat-v2-chat-server.anmal.dev/chathub", options =>
+            .WithUrl(_hubUrl, options =>
             {
                 options.AccessTokenProvider = () => Task.FromResult(_loggedInUserService.UserToken);
             })
