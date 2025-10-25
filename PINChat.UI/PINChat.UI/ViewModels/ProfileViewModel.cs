@@ -54,7 +54,11 @@ public partial class ProfileViewModel : LoadableViewModelBase
             return;
         }
 
-        LoggedInUser.Avatar = await File.ReadAllBytesAsync(image.Path.LocalPath);
+        await using var stream = await image.OpenReadAsync();
+        var memoryStream = new MemoryStream();
+        await stream.CopyToAsync(memoryStream);
+        
+        LoggedInUser.Avatar = memoryStream.ToArray();
     }
 
     [RelayCommand]
