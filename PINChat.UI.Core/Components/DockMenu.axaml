@@ -43,9 +43,9 @@
       <Button CommandParameter="{x:Static enums:DockButton.Contacts}">
         <fa:Icon Value="fa-solid fa-address-book" />
       </Button>
-      <Button CommandParameter="{x:Static enums:DockButton.Groups}">
-        <fa:Icon Value="fa-solid fa-people-group" />
-      </Button>
+      <!-- <Button CommandParameter="{x:Static enums:DockButton.Groups}"> -->
+      <!--   <fa:Icon Value="fa-solid fa-people-group" /> -->
+      <!-- </Button> -->
     </StackPanel>
 
     <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
@@ -59,9 +59,9 @@
         <fa:Icon Value="fa-solid fa-circle-half-stroke" />
       </Button>
 
-      <Button CommandParameter="{x:Static enums:DockButton.Settings}">
-        <fa:Icon Value="fa-solid fa-gear" />
-      </Button>
+      <!-- <Button CommandParameter="{x:Static enums:DockButton.Settings}"> -->
+      <!--   <fa:Icon Value="fa-solid fa-gear" /> -->
+      <!-- </Button> -->
       <Button Padding="-1" CommandParameter="{x:Static enums:DockButton.Profile}">
         <components:AvatarImage AvatarSource="{Binding ElementName=Root, Path=Avatar}" Radius="15" Rect="0,0,42,42" Size="42" />
       </Button>
