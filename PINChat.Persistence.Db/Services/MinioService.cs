@@ -19,7 +19,7 @@ public class MinioService : IFileService
         _minioClient = new MinioClient()
             .WithEndpoint(_minioOptions.Endpoint)
             .WithCredentials(_minioOptions.AccessKey, _minioOptions.SecretKey)
-            .WithSSL()
+            .WithSSL(_minioOptions.UseSsl)
             .Build();
     }
     
